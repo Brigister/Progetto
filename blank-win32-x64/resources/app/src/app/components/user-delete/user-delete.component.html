@@ -1,0 +1,7 @@
+<p>Users</p>
+<div *ngFor="let user of users">
+    <h4>{{user.username}}</h4>
+    <p>{{user.email}}</p>
+    <p>{{user._id}}</p>
+    <button (click)='delete(user._id)'>Elimina</button>
+</div>
