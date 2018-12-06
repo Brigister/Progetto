@@ -1,15 +1,21 @@
+button {
+    border-radius: 10px;
+    background-color: gainsboro;
+    width: 200px;
+    margin: 5px;
+}
+
 .content table td,
 .content table th {
-    border: 1px solid #dbdbdb;
-    padding: 0.5em 0.75em;
+    border: 1px solid black;
     vertical-align: middle;
     height: 50px;
+    width: 50px;
     text-align: center;
 }
 
 .content table {
-    width: 80%;
-    margin: 0 auto;
+    margin: auto;
 }
 
 .content table tr:hover {
@@ -17,7 +23,7 @@
 }
 
 .battleship-tile:hover {
-    cursor: pointer;
+    cursor: crosshair;
 }
 
 .hit {
@@ -26,4 +32,9 @@
 
 .miss {
     background-color: aqua !important;
+}
+
+.posizionamento {
+    text-align: center;
+    margin-bottom: 20px;
 }

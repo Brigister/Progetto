@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-// import needed classes and services
 import { BoardService } from '../../services/board.service'
 import { Board } from '../../board'
 import io from 'socket.io-client';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
 import { Player } from 'src/app/player';
+import { IOffset } from 'selenium-webdriver';
+import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 
 var gameId: string = '2';
 const board_size: number = 10;
@@ -26,11 +27,16 @@ export class GameComponent {
   loss : boolean = false;
   ver: boolean = false;
 
+//ULTIMA COSA DA SISTEMARE PRE CONSEGNA -> IL NUMERO DI BARCHE GIUSTO!! 
+//------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+//------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+//------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+//------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+
   //ship_try: any [] = [2, 2, 2, 2, 3, 3, 4, 4, 5];
   ship_try: any [] = [2, 3, 4];
   ship_test = this.ship_try.slice(0);
 
-  //metto nell'oggetto per fare il 1 livello di cheat del this
   gamedata: any = {
     socket: null,
     gameId: '2',
@@ -64,20 +70,19 @@ export class GameComponent {
   id: string = this.authService.getId();
   
   
+
+
   constructor(
     private boardService: BoardService,
     private authService: AuthService,
     public dataService : DataService
   ) {}
 
-  
   ngOnInit(): void {
     console.log(gameId);
     this.me.username = this.authService.getUsername();
     this.me.id = this.authService.getId();
 
-    //non puoi usare il this dentro la cosa perchè il contesto è un altro
-    //questo lo cheatta (livello2)
     var self = this;
 
     self.gamedata.turno = '1';
@@ -85,8 +90,7 @@ export class GameComponent {
     self.gamedata.socket = io.connect('http://localhost:3000');
 
     self.gamedata.socket.on('connect', () => {
-      // console.log(this.players);
-      console.log('utente connessionato');
+      console.log('loggato');
     })
 
     self.gamedata.socket.on('new game', function (data) {
@@ -105,7 +109,7 @@ export class GameComponent {
     });
 
 
-    //fa partire scambio
+    //scambio boards
     self.gamedata.socket.on('game started', function() {
       //self.gamedata.gucci = true;
       self.players = true;
@@ -116,7 +120,7 @@ export class GameComponent {
       //self.gamedata.socket.emit('scambio', this.myBoard)
     });
 
-    //ricevo board
+    //ricezione boards
     self.gamedata.socket.on('ack2', function(data){
       console.log('ricevo board');
       
@@ -130,17 +134,14 @@ export class GameComponent {
       self.gamedata.received = true;
     })
 
-    /*self.gamedata.socket.on('ack2', function(data) {
-     console.log(data);
-    })*/
 
     self.gamedata.socket.on('turn', function(nuovoTurno) {
-      //gestire colpo 
+      //gestione colpo di cannone** 
       self.gamedata.turno = nuovoTurno;
       console.log(self.gamedata.turno);
     })
 
-    //viene eseguito quando perdo
+    //partita persa!
     self.gamedata.socket.on('loss', function(data){
       console.log('Your opponent ' + data + ' has won the game');
       self.gamedata.loses = true
@@ -149,11 +150,13 @@ export class GameComponent {
     })
 
     
-    //cambio di posizionamento orizzontale/verticale
+
+    
+    //switch posizionamento orizzontale e verticale
     self.verPos = function(click: any){
       if (this.ver == false) {
         this.ver = true;
-        console.log("stai mettendo le barche in verticale");
+        console.log("Posizionamento : Verticale");
         var cambio = document.getElementById("cambio");
         cambio.innerText="Posizionamento Orizzontale";
       }
@@ -164,16 +167,19 @@ export class GameComponent {
       }
     }
 
-    //controlla che le barche siano messe correttamente
+
+
+    //controllo posizionamento adeguato delle barche
     self.positionCheck = function(row : number, col : number, ship : number) {
       var _row : number = row;
       //var fif : number = row;
       var _col : number = col;
       var good = true;
       //console.log(this.boards[0].tiles[row--][col].value)
+     
 
       if(this.ver){
-        //controllo che le verticali non escano e che non ce ne siano adiacenti ai lati
+        //posizionamenti verticali all'interno del reticolo ed adiacenza ai lati
         for (var i = 0; i<ship; i++) {
           if (_row > (board_size-1)) {
            good = false;
@@ -201,7 +207,7 @@ export class GameComponent {
           
       
         if(row > 0 && good == true){
-          //controllo che le verticali non abbiamo una barca sopra
+          //controllo posizionamento verticale : barche sopra e sotto
           if (this.boards[0].tiles[row-1][col].value == 1){
             good = false;
           }   
@@ -211,10 +217,9 @@ export class GameComponent {
           good = false;
         }  
 
-        //controlli
       }
       else{
-        //controllo che le orizzontali non escano
+        //controllo posizionamento orizzontale : rimanere all'interno del reticolo
         for (var i = 0; i<ship; i++) {
           if (_col > (board_size-1)) {
            good = false;
@@ -242,7 +247,7 @@ export class GameComponent {
           
       
         if(good == true && col > 0){
-          //controllo che le verticali non abbiamo una barca sopra
+          //controllo posizionamento verticale : barche sopra e sotto
           if (this.boards[0].tiles[row][col-1].value == 1){
             good = false;
           }   
@@ -251,17 +256,13 @@ export class GameComponent {
         if (good == true && (col+ship) < board_size && this.boards[0].tiles[row][col+ship].value == 1){
           good = false;
         }  
-        //controlli
+        
       }
 
       console.log(this.boards[0]);
       return good;
     }
-    //metto le caselle vicine settate a value = 2 e faccio il controllo se value =1 || value =2 non posso mettere la barca
-
-    // va messo una volta finito di applicare una barca, una nuova variabile true o false che abbiano tutte le caselle, 
-    //che diventa true in tutte le caselle intorno alla barca applicata e una volta che metti una nuova barca controlla 
-    //che non ci siano nella traiettoia +1 -1 row e +1 -1 col caselle che hanno quella variabile a true
+    //value = 2 -> check se =1 || =2 no room to place
     
     self.shipPositioning = function(click: any) {
       
@@ -271,7 +272,7 @@ export class GameComponent {
         tile = this.boards[boardId].tiles[row][col];
     
       if (this.ship_try.length == 0) {
-        console.log("non ci sono più barche");
+        console.log("barche esaurite");
         return;
       }
 
@@ -290,7 +291,7 @@ export class GameComponent {
         
       }
       else {
-        alert("Nou");
+        alert("Nope");
       }
       
       if (this.ship_try.length == 0) {
@@ -301,8 +302,6 @@ export class GameComponent {
       }
   }
   
-   
-    //MISSA WOWEI
     self.playerOneClick = function(click:any) {
       
       let id = click.target.id,
@@ -319,23 +318,28 @@ export class GameComponent {
       console.log("no");
       return;
     }
-    
+    //necessario per evento server : hit e informazioni turno del giocatore
       if (self.gamedata.turno == self.gamedata.numeroGiocatore) {
-        console.log("TURNO DI " + self.gamedata.turno)
-        //per farlo server side devi mandargli l'evento dell'hit
-        //e l'info del giocatore del quale il turno è
+        console.log("Turno di " + self.gamedata.turno)
         self.gamedata.socket.emit('hit', self.gamedata.turno);
         self.gamedata.turno = self.gamedata.turno == "1" ? "2" : "1";
 
         
 
         if (tile.value == 1) {
-          //hit
+          //colpo di cannone
           this.boards[boardId].tiles[row][col].status = 'hit';
           this.me.score++;
-          if(this.me.score == 1){//da cambiare
-            console.log(this.me.username + ', you win the game!')
-            //viene eseguito quando vinco
+          if(this.me.score == 10){
+            
+  //ULTIMA COSA DA SISTEMARE PRE CONSEGNA -> score per vincere
+  //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+  //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+  //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+  //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
+
+            console.log(this.me.username + ', congratulazioni! Hai vinto la partita!')
+            //Vittoria
             self.gamedata.socket.emit('victory', this.username);
             self.authService.userWin(this.me.id);
             this.gamedata.notOver = false;
@@ -343,7 +347,7 @@ export class GameComponent {
           }
           console.log('hit, score: ' + this.me.score);
         } else {
-          //miss
+          //acqua
           this.boards[boardId].tiles[row][col].status = 'miss' 
         }
         this.boards[boardId].tiles[row][col].used = true;
@@ -351,12 +355,12 @@ export class GameComponent {
         return this;
 
       } else {
-        console.log("NON E' IL TUO TURNO CHEATER")
+        console.log("C'è luogo e momento per ogni cosa, ma non ora. Non è il tuo turno.")
       }
     }
 
     self.gamedata.socket.on('arrivoClick', function(data) {
-      //gestire colpo 
+      //Gestione colpo
       self.playerArrivoClick(data);
       console.log(data);
     })
@@ -377,12 +381,12 @@ export class GameComponent {
       return;
     }
             if (tile.value == 1) {
-          //hit
+          //Colpito
           this.boards[boardId].tiles[row][col].status = 'hit';
         
           
              } else {
-          //miss
+          //Acqua (Mancato)
           this.boards[boardId].tiles[row][col].status = 'miss' 
         }
         this.boards[boardId].tiles[row][col].used = true;
@@ -405,26 +409,30 @@ export class GameComponent {
   
 
   deleteShips(){
+    debugger;
+    console.log(this.boards);
     this.boards.pop();
     this.myBoard = this.boardService.createBoard();
     var ship_testone = this.ship_test.slice(0);
     this.ship_try = ship_testone;
     this.deletable = false;
     this.submittable = false;
-
+   /*  console.log(this.deletable);
+    console.log(this.boards); */
     console.log(this.ship_test);
     
   }
-
-  //se premi sul bottone ti dice di chi è il turno
+/* 
+//se premi sul bottone ti dice di chi è il turno
   israel(){
     console.log("TURNO DI " + this.gamedata.turno + this.loss + this.end + this.gamedata.loses);
-  }
+  })
+ */
 
   checkValidHit(tile: any) : boolean {
 
     if(this.gamedata.loses == true)  {
-      console.log('hai perso, la partita è finita');
+      console.log('Hai perso, la partita è terminata!');
       return false;
     }
     if (this.end) {
@@ -436,16 +444,13 @@ export class GameComponent {
     return true;
   }
 
-  // winner property to determine if a user has won the game.
-  // once a user gets a score higher than the size of the game
-  // board, he has won.
+  //score necessario per vincere
   get winner () : boolean{
     return this.score >= 20
   }
 
-  // get all boards and assign to boards property
+  // ricezione board e assegnamento proprietà
   get boards () : Board[] {
     return this.boardService.getBoards()
   }
 }
-

@@ -12,8 +12,13 @@
     <button *ngIf="_authService.loggedIn()" routerLink="/message" routerLinkActive="active">Messaggi</button>
     <button *ngIf="_authService.loggedIn() && _authService.isAdmin()" routerLink="/delete" routerLinkActive="active">Gestisci Profili</button>
     <button *ngIf="_authService.loggedIn()" routerLink="/" routerLinkActive="active" (click)="_authService.logoutUser()">Logout</button>
-
 </div>
+
+<nav class="navbar">
+
+
+
+</nav>
 
 <hr>
 
