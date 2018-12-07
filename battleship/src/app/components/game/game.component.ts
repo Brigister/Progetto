@@ -49,11 +49,13 @@ export class GameComponent {
     received: false
   };
 
-  me: any = {
+  //andrebbe tolta
+  /* me: any = {
     score: 0,
     id: '',
-    username: ''
-  };
+    username: '' 
+  };*/
+
   horPos : Function;
   verPos : Function;
   positionCheck: Function;
@@ -80,8 +82,8 @@ export class GameComponent {
 
   ngOnInit(): void {
     console.log(gameId);
-    this.me.username = this.authService.getUsername();
-    this.me.id = this.authService.getId();
+    /* this.me.username = this.authService.getUsername();
+    this.me.id = this.authService.getId(); */
 
     var self = this;
 
@@ -146,7 +148,7 @@ export class GameComponent {
       console.log('Your opponent ' + data + ' has won the game');
       self.gamedata.loses = true
       self.gamedata.notOver = false;
-      self.authService.userLoss(self.me.id);
+      self.authService.userLoss(self.username);
     })
 
     
@@ -301,7 +303,9 @@ export class GameComponent {
         this.deletable = true;
       }
   }
-  
+    //value = 0 non c'è la barca
+    //value = 1 c'è una barca
+    //value = 2 casella cliccata
     self.playerOneClick = function(click:any) {
       
       let id = click.target.id,
@@ -313,11 +317,8 @@ export class GameComponent {
 
   
 
-    if (!this.checkValidHit(1, tile)) {
-      console.log("no");
-      return;
-    }
-    //necessario per evento server : hit e informazioni turno del giocatore
+    if (this.checkValidHit(1, tile)) {
+         //necessario per evento server : hit e informazioni turno del giocatore
       if (self.gamedata.turno == self.gamedata.numeroGiocatore) {
         console.log("Turno di " + self.gamedata.turno)
         self.gamedata.socket.emit('hit', self.gamedata.turno);
@@ -326,8 +327,10 @@ export class GameComponent {
           if (tile.value == 1) {
             //colpo di cannone
             this.boards[1].tiles[row][col].status = 'hit';
-            this.me.score++;
-            if(this.me.score == 10){
+            this.boards[1].tiles[row][col].value = 2;
+            console.log(this.boards[1].tiles[row][col].value);
+            this.score++;
+            if(this.score == 1){
             
   //ULTIMA COSA DA SISTEMARE PRE CONSEGNA -> score per vincere
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
@@ -335,17 +338,16 @@ export class GameComponent {
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
 
-              console.log(this.me.username + ', congratulazioni! Hai vinto la partita!')
               //Vittoria
               self.gamedata.socket.emit('victory', this.username);
-              self.authService.userWin(this.me.id);
+              self.authService.userWin(this.username);
               this.gamedata.notOver = false;
               this.end = true;
             }
-            console.log('hit, score: ' + this.me.score);
           } else {
               //acqua
               this.boards[1].tiles[row][col].status = 'miss' 
+              this.boards[1].tiles[row][col].value = 2;
             }        
 
         
@@ -356,7 +358,14 @@ export class GameComponent {
       } else {
         console.log("C'è luogo e momento per ogni cosa, ma non ora. Non è il tuo turno.")
       }
+    } else {
+      //non puoi premere di nuovo qua
+      //rimane il turno di quello che ha cliccato sul posto sbagliato
     }
+
+    }
+    //-----------------------------
+
 
     self.gamedata.socket.on('arrivoClick', function(data) {
       //Gestione colpo
@@ -380,7 +389,7 @@ export class GameComponent {
             if (tile.value == 1) {
           //Colpito
           this.boards[0].tiles[row][col].status = 'hit';
-        
+          
           
              } else {
           //Acqua (Mancato)
@@ -417,8 +426,9 @@ export class GameComponent {
 
   checkValidHit(tile: any) : boolean {
     //non va un cazzo
-    console.log(tile.status);
+    console.log(tile.value);
     var clickable = true;
+    debugger;
     /* if(this.gamedata.loses == true)  {
       console.log('Hai perso, la partita è terminata!');
       return false;
@@ -426,13 +436,13 @@ export class GameComponent {
     if (this.end) {
       return false;
     } */
-    if (tile.status == 'hit' ) {
+    if (tile.value == 2 ) {
       clickable = false
     }
 
-    if (tile.status == 'miss') {
+    /* if (tile.status == '2') {
       clickable = false
-    }
+    } */
     console.log (clickable);
     return clickable;
   }

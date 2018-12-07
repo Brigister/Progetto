@@ -29,13 +29,13 @@ export class AuthService {
     
   }
 
-  userWin(id: string): void{
-    this.http.patch('http://localhost:3000/user/' + id + "/win", null).subscribe((data) =>
+  userWin(username: string): void{
+    this.http.patch('http://localhost:3000/user/' + username + "/win", null).subscribe((data) =>
     console.log('SUCC'));
   }
 
-  userLoss(id: string): void{
-    this.http.patch('http://localhost:3000/user/' + id + "/loss", null).subscribe((data) =>
+  userLoss(username: string): void{
+    this.http.patch('http://localhost:3000/user/' + username + "/loss", null).subscribe((data) =>
     console.log('SUCC'));
   }
   

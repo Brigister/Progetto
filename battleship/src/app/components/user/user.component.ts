@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class UserComponent /*implements OnInit*/ {
   users: IUser[];
-  posts: Post[];
+  /* posts: Post[]; */
 
   constructor(public http: DataService) {
   }
@@ -39,10 +39,10 @@ export interface IUser {
   password: string
 
 }
-
+/* 
 interface Post {
   id: number,
   title: string,
   body: string,
   userId: number
-}
+} */
