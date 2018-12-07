@@ -3,7 +3,7 @@
         <form>
             <label>Destinatario: </label>
             <br>
-            <input value='' [value]="inputVar" type="text" placeholder="Inserisci Destinatio" [(ngModel)]="messageData.recipient" name="recipient" required>
+            <input value='' [value]="inputVar" type="text" placeholder="Inserisci Destinatario" [(ngModel)]="messageData.recipient" name="recipient" required>
             <br><br>
             <label>Messaggio:</label>
             <br>
@@ -16,10 +16,12 @@
     </div>
 </div>
 <hr>
+<h2>Ecco i tuoi Messaggi:</h2>
+<hr>
 <div *ngFor="let message of messages">
     <h3>Da: {{message.author}}</h3>
     <p>{{message.date}}</p>
-    <p style="text-indent:2em"> <strong>Messaggio:</strong> {{message.content}}</p>
+    <p style="text-indent:20px"> <strong>Messaggio:</strong> {{message.content}}</p>
     <button (click)='delete(message._id)'>Elimina</button>
     <hr>
 </div>

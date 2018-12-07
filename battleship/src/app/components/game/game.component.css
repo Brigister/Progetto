@@ -5,21 +5,16 @@ button {
     margin: 5px;
 }
 
-.content table td,
-.content table th {
+.tabella table td,
+.tabella table th {
     border: 1px solid black;
-    vertical-align: middle;
     height: 50px;
     width: 50px;
     text-align: center;
 }
 
-.content table {
+.tabella table {
     margin: auto;
-}
-
-.content table tr:hover {
-    background-color: transparent;
 }
 
 .battleship-tile:hover {

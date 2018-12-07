@@ -1,9 +1,7 @@
-<!--The content below is only a placeholder and can be replaced.-->
 <div style="text-align:center">
-    <h1>
-        Welcome to {{ title }}! <br> Welcome to Favelas!
-    </h1>
+    <h1>Benvenuti nel fantastico mondo delle Battaglie Navali!!!!</h1>
 </div>
+
 <div style="text-align:center">
     <button *ngIf="!_authService.loggedIn()" routerLink="/login" routerLinkActive="active">Login</button>
     <button *ngIf="!_authService.loggedIn()" routerLink="/signup" routerLinkActive="active">Registrati</button>
@@ -13,12 +11,6 @@
     <button *ngIf="_authService.loggedIn() && _authService.isAdmin()" routerLink="/delete" routerLinkActive="active">Gestisci Profili</button>
     <button *ngIf="_authService.loggedIn()" routerLink="/" routerLinkActive="active" (click)="_authService.logoutUser()">Logout</button>
 </div>
-
-<nav class="navbar">
-
-
-
-</nav>
 
 <hr>
 

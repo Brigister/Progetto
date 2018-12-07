@@ -18,7 +18,7 @@ export class BoardService {
     for (let i = 0; i < size; i++) {
       tiles[i] = [];
       for (let j = 0; j < size; j++) {
-        tiles[i][j] = { used: false, value: 0, status: '' };
+        tiles[i][j] = {value: 0, status: ''};
       }
     }
 
@@ -26,7 +26,7 @@ export class BoardService {
       Player: new Player({ id: this.authService.getId(), username: this.authService.getUsername() }),
       tiles: tiles
     });
-    this.boards.push(board);
+    this.boards.unshift(board);
     console.log(this.boards)
     return tiles;
   }

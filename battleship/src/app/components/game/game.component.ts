@@ -305,16 +305,15 @@ export class GameComponent {
     self.playerOneClick = function(click:any) {
       
       let id = click.target.id,
-      boardId = 1,   
       row = id.substring(2,3), col = id.substring(3,4),
-      tile = this.boards[boardId].tiles[row][col];
+      tile = this.boards[1].tiles[row][col];
       console.log(tile);
       this.gamedata.socket.emit('click', id);
 
 
   
 
-    if (!this.checkValidHit(boardId, tile)) {
+    if (!this.checkValidHit(1, tile)) {
       console.log("no");
       return;
     }
@@ -324,13 +323,11 @@ export class GameComponent {
         self.gamedata.socket.emit('hit', self.gamedata.turno);
         self.gamedata.turno = self.gamedata.turno == "1" ? "2" : "1";
 
-        
-
-        if (tile.value == 1) {
-          //colpo di cannone
-          this.boards[boardId].tiles[row][col].status = 'hit';
-          this.me.score++;
-          if(this.me.score == 10){
+          if (tile.value == 1) {
+            //colpo di cannone
+            this.boards[1].tiles[row][col].status = 'hit';
+            this.me.score++;
+            if(this.me.score == 10){
             
   //ULTIMA COSA DA SISTEMARE PRE CONSEGNA -> score per vincere
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
@@ -338,20 +335,22 @@ export class GameComponent {
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
 
-            console.log(this.me.username + ', congratulazioni! Hai vinto la partita!')
-            //Vittoria
-            self.gamedata.socket.emit('victory', this.username);
-            self.authService.userWin(this.me.id);
-            this.gamedata.notOver = false;
-            this.end = true;
-          }
-          console.log('hit, score: ' + this.me.score);
-        } else {
-          //acqua
-          this.boards[boardId].tiles[row][col].status = 'miss' 
-        }
-        this.boards[boardId].tiles[row][col].used = true;
-        this.boards[boardId].tiles[row][col].value = "X";
+              console.log(this.me.username + ', congratulazioni! Hai vinto la partita!')
+              //Vittoria
+              self.gamedata.socket.emit('victory', this.username);
+              self.authService.userWin(this.me.id);
+              this.gamedata.notOver = false;
+              this.end = true;
+            }
+            console.log('hit, score: ' + this.me.score);
+          } else {
+              //acqua
+              this.boards[1].tiles[row][col].status = 'miss' 
+            }        
+
+        
+        //this.boards[boardId].tiles[row][col].used = true;
+        //this.boards[boardId].tiles[row][col].value = "X";
         return this;
 
       } else {
@@ -368,29 +367,27 @@ export class GameComponent {
     self.playerArrivoClick = function(click:any) {
       
       let id = click,
-      
-      boardId = 0,   
       row = id.substring(2,3), col = id.substring(3,4),
-      tile = this.boards[boardId].tiles[row][col];
+      tile = this.boards[0].tiles[row][col];
       console.log(click);
         
 
       if (self.gamedata.turno != self.gamedata.numeroGiocatore) {
-      if (!this.checkValidHit(boardId, tile)) {
+      if (!this.checkValidHit(0, tile)) {
       console.log("no");
       return;
     }
             if (tile.value == 1) {
           //Colpito
-          this.boards[boardId].tiles[row][col].status = 'hit';
+          this.boards[0].tiles[row][col].status = 'hit';
         
           
              } else {
           //Acqua (Mancato)
-          this.boards[boardId].tiles[row][col].status = 'miss' 
+          this.boards[0].tiles[row][col].status = 'miss' 
         }
-        this.boards[boardId].tiles[row][col].used = true;
-        this.boards[boardId].tiles[row][col].value = "X";
+        //this.boards[boardId].tiles[row][col].used = true;
+        //this.boards[0].tiles[row][col].value = "X";
         return this;
 
       } 
@@ -404,44 +401,40 @@ export class GameComponent {
     this.gamedata.sent = true;
     this.submittable = false;
     this.deletable = false;
+    console.log(this.boards)
     return;
    }
-  
 
   deleteShips(){
-    debugger;
-    console.log(this.boards);
-    this.boards.pop();
-    this.myBoard = this.boardService.createBoard();
+    this.boards.shift();
+    this.myBoard=this.boardService.createBoard()
     var ship_testone = this.ship_test.slice(0);
     this.ship_try = ship_testone;
     this.deletable = false;
     this.submittable = false;
-   /*  console.log(this.deletable);
-    console.log(this.boards); */
-    console.log(this.ship_test);
-    
+    console.log(this.ship_test);  
   }
-/* 
-//se premi sul bottone ti dice di chi è il turno
-  israel(){
-    console.log("TURNO DI " + this.gamedata.turno + this.loss + this.end + this.gamedata.loses);
-  })
- */
 
   checkValidHit(tile: any) : boolean {
-
-    if(this.gamedata.loses == true)  {
+    //non va un cazzo
+    console.log(tile.status);
+    var clickable = true;
+    /* if(this.gamedata.loses == true)  {
       console.log('Hai perso, la partita è terminata!');
       return false;
     }
     if (this.end) {
       return false;
+    } */
+    if (tile.status == 'hit' ) {
+      clickable = false
     }
-    if(tile.value == "X") {
-      return false;
+
+    if (tile.status == 'miss') {
+      clickable = false
     }
-    return true;
+    console.log (clickable);
+    return clickable;
   }
 
   //score necessario per vincere

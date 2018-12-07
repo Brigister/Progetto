@@ -1,0 +1,15 @@
+button {
+    width: 100px;
+    border-radius: 10px;
+    background-color: gainsboro;
+}
+
+h2 {
+    text-align: center;
+    font-size: 40px;
+}
+
+h3 {
+    margin-left: 10px;
+    font-size: 25px;
+}
