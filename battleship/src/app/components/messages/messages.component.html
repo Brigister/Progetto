@@ -18,7 +18,7 @@
 <hr>
 <h2>Ecco i tuoi Messaggi:</h2>
 <hr>
-<div *ngFor="let message of messages">
+<div *ngFor="let author of message">
     <h3>Da: {{message.author}}</h3>
     <p>{{message.date}}</p>
     <p style="text-indent:20px"> <strong>Messaggio:</strong> {{message.content}}</p>

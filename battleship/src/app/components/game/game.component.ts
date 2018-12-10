@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../../services/board.service'
-import { Board } from '../../board'
-import io from 'socket.io-client';
 import { AuthService } from 'src/app/services/auth.service';
 import { DataService } from 'src/app/services/data.service';
+import io from 'socket.io-client';
 import { Player } from 'src/app/player';
-import { IOffset } from 'selenium-webdriver';
-import { formGroupNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { Board } from '../../board'
 
 var gameId: string = '2';
 const board_size: number = 10;
@@ -49,30 +47,18 @@ export class GameComponent {
     received: false
   };
 
-  //andrebbe tolta
-  /* me: any = {
-    score: 0,
-    id: '',
-    username: '' 
-  };*/
-
   horPos : Function;
   verPos : Function;
   positionCheck: Function;
   shipPositioning: Function;
   playerOneClick: Function;
   playerArrivoClick: Function;
-  submittable : boolean = false;
-  deletable: boolean = false;
   notOver : boolean = true;
   
-
   score: number = 0;
   username: string = this.authService.getUsername();
   id: string = this.authService.getId();
   
-  
-
 
   constructor(
     private boardService: BoardService,
@@ -150,8 +136,6 @@ export class GameComponent {
       self.gamedata.notOver = false;
       self.authService.userLoss(self.username);
     })
-
-    
 
     
     //switch posizionamento orizzontale e verticale
@@ -295,14 +279,8 @@ export class GameComponent {
       else {
         alert("Nope");
       }
-      
-      if (this.ship_try.length == 0) {
-        this.submittable = true;
-      }
-      if (this.ship_try.length <= 8) {
-        this.deletable = true;
-      }
   }
+
     //value = 0 non c'è la barca
     //value = 1 c'è una barca
     //value = 2 casella cliccata
@@ -314,10 +292,7 @@ export class GameComponent {
       console.log(tile);
       this.gamedata.socket.emit('click', id);
 
-
-  
-
-    if (this.checkValidHit(1, tile)) {
+     if (this.checkValidHit(tile)) {
          //necessario per evento server : hit e informazioni turno del giocatore
       if (self.gamedata.turno == self.gamedata.numeroGiocatore) {
         console.log("Turno di " + self.gamedata.turno)
@@ -359,8 +334,8 @@ export class GameComponent {
         console.log("C'è luogo e momento per ogni cosa, ma non ora. Non è il tuo turno.")
       }
     } else {
-      //non puoi premere di nuovo qua
-      //rimane il turno di quello che ha cliccato sul posto sbagliato
+        alert ("hai l'autismo?")
+      
     }
 
     }
@@ -382,21 +357,17 @@ export class GameComponent {
         
 
       if (self.gamedata.turno != self.gamedata.numeroGiocatore) {
-      if (!this.checkValidHit(0, tile)) {
-      console.log("no");
-      return;
-    }
-            if (tile.value == 1) {
+        if (!this.checkValidHit(tile)) {
+            console.log("no");
+            return;
+        }
+        if (tile.value == 1) {
           //Colpito
           this.boards[0].tiles[row][col].status = 'hit';
-          
-          
-             } else {
-          //Acqua (Mancato)
-          this.boards[0].tiles[row][col].status = 'miss' 
-        }
-        //this.boards[boardId].tiles[row][col].used = true;
-        //this.boards[0].tiles[row][col].value = "X";
+        } else {
+             //Acqua (Mancato)
+              this.boards[0].tiles[row][col].status = 'miss' 
+          }
         return this;
 
       } 
@@ -408,8 +379,6 @@ export class GameComponent {
     this.myBoard = this.boards[0].tiles;
     this.gamedata.socket.emit('ack1', this.boards[0].tiles);
     this.gamedata.sent = true;
-    this.submittable = false;
-    this.deletable = false;
     console.log(this.boards)
     return;
    }
@@ -419,41 +388,20 @@ export class GameComponent {
     this.myBoard=this.boardService.createBoard()
     var ship_testone = this.ship_test.slice(0);
     this.ship_try = ship_testone;
-    this.deletable = false;
-    this.submittable = false;
     console.log(this.ship_test);  
   }
 
+  //controlla se una casella è già stata cliccata
   checkValidHit(tile: any) : boolean {
-    //non va un cazzo
-    console.log(tile.value);
     var clickable = true;
-    debugger;
-    /* if(this.gamedata.loses == true)  {
-      console.log('Hai perso, la partita è terminata!');
-      return false;
-    }
-    if (this.end) {
-      return false;
-    } */
+
     if (tile.value == 2 ) {
       clickable = false
     }
-
-    /* if (tile.status == '2') {
-      clickable = false
-    } */
-    console.log (clickable);
     return clickable;
   }
 
-  //score necessario per vincere
-  get winner () : boolean{
-    return this.score >= 20
-  }
-
-  // ricezione board e assegnamento proprietà
   get boards () : Board[] {
     return this.boardService.getBoards()
-  }
-}
+  } 
+} 

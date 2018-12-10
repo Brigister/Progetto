@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http'; 
 
 import { AppComponent } from './app.component';
-import { UserComponent } from './components/user/user.component';
+import { LeaderboardComponent } from './components/leaderboard/leaderboard.component';
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { AuthService } from './services/auth.service';
 import { UserSignupComponent } from './components/user-signup/user-signup.component';
@@ -23,7 +23,7 @@ import { GameComponent } from './components/game/game.component';
 
 const appRoutes: Routes = [
   { path: 'login', component: UserLoginComponent },
-  { path: 'ranking', component: UserComponent, canActivate: [AuthGuard]},
+  { path: 'leaderboard', component: LeaderboardComponent, canActivate: [AuthGuard]},
   { path: 'signup', component: UserSignupComponent },
   { path: 'delete', component: UserDeleteComponent, canActivate: [AuthGuard]},
   { path: 'message', component: MessagesComponent, canActivate: [AuthGuard]},
@@ -34,7 +34,7 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    UserComponent,
+    LeaderboardComponent,
     UserLoginComponent,
     UserSignupComponent,
     UserDeleteComponent,

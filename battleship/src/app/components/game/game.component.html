@@ -1,6 +1,5 @@
 <div class="container">
 
-
     <!-- Se c'è un solo giocatore nella room -->
     <h2 *ngIf="players == false">Aspettando un secondo giocatore...</h2>
 
@@ -13,8 +12,8 @@
     <!-- Operazioni sulle barche -->
     <div class="posizionamento">
         <button *ngIf="players != false && !gamedata.sent" id="cambio" (click)="verPos($event)">Posizionamento Verticale</button>
-        <button *ngIf="deletable" (click)="deleteShips()">Rimuovi barche</button>
-        <button *ngIf="submittable" (click)="submitBoard()">Fine Fase di Posizionamento</button>
+        <button *ngIf="ship_try.length < 3" (click)="deleteShips()">Rimuovi barche</button>
+        <button *ngIf="ship_try.length == 0" (click)="submitBoard()">Fine Fase di Posizionamento</button>
         <h2 *ngIf="gamedata.sent && !gamedata.received">Il tuo campo è stato inviato correttamente <br> Il gioco partirà non appena il tuo Avversario finirà di posizionare le sue barche</h2>
     </div>
 

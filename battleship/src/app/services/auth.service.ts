@@ -60,8 +60,6 @@ export class AuthService {
     return !!localStorage.getItem('token')    
   }
 
-
-
   getId() : string {
     const token = <any>JWT(this.getToken());
     return token.userId

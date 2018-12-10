@@ -8,7 +8,6 @@ import { Router } from '@angular/router'
 export class DataService {
 
   constructor(public http:HttpClient, private _router: Router) { 
-    //console.log('ciaociao');
   }
 
   public deleteMessage(id : string){
@@ -26,16 +25,6 @@ export class DataService {
 
   public userDelete(id: string): void{
     this.http.delete('http://localhost:3000/user/' + id).subscribe((data) =>
-    console.log('SUCC'));
-  }
-
-  public userWin(id: string): void{
-    this.http.patch('http://localhost:3000/user/' + id + "/win", 0).subscribe((data) =>
-    console.log('SUCC'));
-  }
-
-  public userLoss(id: string): void{
-    this.http.patch('http://localhost:3000/user/' + id + "/loss", 0).subscribe((data) =>
     console.log('SUCC'));
   }
 
