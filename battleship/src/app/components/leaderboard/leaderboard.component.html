@@ -5,10 +5,42 @@
 
 <hr>
 
-<div *ngFor="let user of users | slice:0:10">
-    <h2>{{user.username}}</h2>
-    <p>Vittorie: {{user.win}}</p>
-    <p>Sconfitte: {{user.losses}}</p>
-    <P>Giocate: {{user.win+user.losses}}</P>
+<div class="statistiche "><strong>Username</strong></div>
+<div class="statistiche "><strong>Vittorie</strong></div>
+<div class="statistiche "><strong>Sconfitte</strong></div>
+<div class="statistiche "><strong>Giocate</strong></div>
+
+<hr>
+
+<div id="1classificato" *ngFor="let user of users | slice:0:1; index as i">
+    <h1>{{i+1}}° Posizionato</h1>
+    <h2 class="statistiche ">{{user.username}}</h2>
+    <div class="statistiche ">{{user.win}} </div>
+    <div class="statistiche ">{{user.losses}} </div>
+    <div class="statistiche ">{{user.win+user.losses}}</div>
+    <hr>
+</div>
+
+<hr>
+<hr>
+
+<div id="23classificato " *ngFor="let user of users | slice:1:3; index as i ">
+    <h1>{{i+2}}° Posizionato</h1>
+    <h2 class="statistiche ">{{user.username}}</h2>
+    <div class="statistiche ">{{user.win}} </div>
+    <div class="statistiche ">{{user.losses}} </div>
+    <div class="statistiche ">{{user.win+user.losses}}</div>
+    <hr>
+</div>
+
+<hr>
+<hr>
+
+<div *ngFor="let user of users | slice:3:10; index as i ">
+    <h1>{{i+3}}° Posizionato</h1>
+    <h2 class="statistiche ">{{user.username}}</h2>
+    <div class="statistiche ">{{user.win}} </div>
+    <div class="statistiche ">{{user.losses}} </div>
+    <div class="statistiche ">{{user.win+user.losses}}</div>
     <hr>
 </div>
