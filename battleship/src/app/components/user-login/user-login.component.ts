@@ -26,8 +26,4 @@ export class UserLoginComponent implements OnInit {
     )
   }
   
-  logoutUser() {
-    localStorage.removeItem('token')
-    this._router.navigate(['/'])
-  }
 }

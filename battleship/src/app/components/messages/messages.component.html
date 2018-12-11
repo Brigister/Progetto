@@ -7,7 +7,7 @@
             <br><br>
             <label>Messaggio:</label>
             <br>
-            <textarea rows="5" cols="80" placeholder="Inserisci il testo del messaggio" [(ngModel)]="messageData.content" name="content" required></textarea>
+            <textarea type="text" rows="5" cols="80" placeholder="Inserisci il testo del messaggio" [(ngModel)]="messageData.content" name="content" required></textarea>
             <br>
             <input type="submit" (click)="postMessage()">
 
@@ -18,10 +18,23 @@
 <hr>
 <h2>Ecco i tuoi Messaggi:</h2>
 <hr>
-<div *ngFor="let author of message">
-    <h3>Da: {{message.author}}</h3>
-    <p>{{message.date}}</p>
-    <p style="text-indent:20px"> <strong>Messaggio:</strong> {{message.content}}</p>
-    <button (click)='delete(message._id)'>Elimina</button>
+
+<!-- <div *ngFor="let message of messages">
+    <button (click)="showMessage()">{{message.author}}</button>
+
+
+</div>
+ -->
+
+
+
+
+<div *ngFor="let message of messages">
+    <div *ngIf="message.author == 'eyeleren'">
+        <h3>Da: {{message.author}}</h3>
+        <p>{{message.date}}</p>
+        <p style="text-indent:20px"> <strong>Messaggio:</strong> {{message.content}}</p>
+        <button (click)='delete(message._id)'>Elimina</button>
+    </div>
     <hr>
 </div>
