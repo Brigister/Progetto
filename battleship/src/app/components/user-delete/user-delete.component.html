@@ -5,16 +5,15 @@
     <h3>{{user.username}}</h3>
 
     <h4>Informazioni Utente</h4>
+
     <ul>
         <li>{{user.email}}</li>
         <li>{{user._id}}</li>
-        <li *ngIf="isAdmin">Admin</li>
-        <li *ngIf="!isAdmin">Utente</li>
+        <li *ngIf="user.isAdmin">Admin</li>
+        <li *ngIf="!user.isAdmin">Utente</li>
     </ul>
-    <!-- <p>{{user.email}}</p>
-    <p>{{user._id}}</p>
-    <p *ngIf="isAdmin">Admin</p>
-    <p *ngIf="!isAdmin">Utente</p> -->
+
     <button (click)='delete(user._id)'>Elimina</button>
+
     <hr>
 </div>

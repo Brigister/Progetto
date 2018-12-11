@@ -25,4 +25,9 @@ export class UserLoginComponent implements OnInit {
       err => console.log(err)
     )
   }
+  
+  logoutUser() {
+    localStorage.removeItem('token')
+    this._router.navigate(['/'])
+  }
 }

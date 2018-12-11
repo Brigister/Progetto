@@ -1,20 +1,45 @@
 <div class="container">
 
     <!-- Se c'è un solo giocatore nella room -->
-    <h2 *ngIf="players == false">Aspettando un secondo giocatore...</h2>
+    <h2 style="text-align:center" *ngIf="players == false"> Lobby creata, attendi un avversario...
+
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+
+
+    </h2>
 
     <!-- 1 Fase del gioco: Posizionamento navi -->
     <div class="posizionamento" *ngIf="players && !gamedata.sent">
+
         <h2>Fase di Posiziamento - Posiziona le tue barche</h2>
-        <p *ngIf="!submittable">Stai per posizionare la nave da {{ship_try[0]}} unità</p>
+
+        <p *ngIf="ship_try.length > 0">Stai posizionando la nave lunga <strong>{{ship_try[0]}}</strong></p>
+        <p *ngIf="ship_try.length == 0">Hai terminato le tue barche da posizionare, <strong>completa la fase di posizionamento</strong> per proseguire</p>
+
+        <button *ngIf="players != false && !gamedata.sent" id="cambio" (click)="verPos($event)">Posizionamento Verticale</button>
+        <button *ngIf="ship_try.length < 3" (click)="deleteShips()">Rimuovi barche</button>
+        <!-- ricordarsi di mettere la lunghezza vera dell'array di barche pls.-->
+        <button *ngIf="ship_try.length == 0" (click)="submitBoard()">Fine fase di posizionamento</button>
+
     </div>
 
     <!-- Operazioni sulle barche -->
+
     <div class="posizionamento">
-        <button *ngIf="players != false && !gamedata.sent" id="cambio" (click)="verPos($event)">Posizionamento Verticale</button>
-        <button *ngIf="ship_try.length < 3" (click)="deleteShips()">Rimuovi barche</button>
-        <button *ngIf="ship_try.length == 0" (click)="submitBoard()">Fine Fase di Posizionamento</button>
-        <h2 *ngIf="gamedata.sent && !gamedata.received">Il tuo campo è stato inviato correttamente <br> Il gioco partirà non appena il tuo Avversario finirà di posizionare le sue barche</h2>
+
+        <!-- malino qui coi bottoni eh..-->
+        <h2 *ngIf="gamedata.sent && !gamedata.received">Il tuo campo è stato inviato correttamente all'avversario! <br> Il gioco partirà non appena il tuo avversario finirà di posizionare le sue barche.</h2>
+
+        <div *ngIf="gamedata.sent && !gamedata.received" class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+
     </div>
 
     <div *ngIf="gamedata.notOver" class="tabella">
@@ -55,8 +80,10 @@
 
     <!-- Vittoria/Sconfitta -->
     <div>
-        <h1 *ngIf="end">Hai Vinto! Complimenti! Per concludere il gioco lascia questa pagina, grazie.</h1>
-        <h1 *ngIf="gamedata.loses">Hai Perso! ahaha nub! Per concludereil gioco lascia questa pagina, grazie.</h1>
+        <br><br><br><br><br><br><br><br><br><br>
+
+        <h1 style="text-align:center" *ngIf="end">Hai Vinto! Complimenti! Per concludere il gioco lascia questa pagina, grazie.</h1>
+        <h1 style="text-align:center" *ngIf="gamedata.loses">Mi spiace, hai perso! Per concludere il gioco lascia questa pagina, grazie.</h1>
     </div>
 
 </div>

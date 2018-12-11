@@ -54,10 +54,9 @@ export class MessagesComponent implements OnInit {
       }
       else {
         console.log("Destinatario inesistente");
-       // var p = document.createElement("div");
+       
         document.getElementById("error").innerHTML = "𝓓𝓮𝓼𝓽𝓲𝓷𝓪𝓽𝓪𝓻𝓲𝓸 𝓲𝓷𝓮𝓼𝓲𝓼𝓽𝓮𝓷𝓽𝓮";
-        //console.log(p);
-
+        
        // var addp = document.getElementById("error");
         //document.body.insertBefore(p, addp.childNodes[0]);
         

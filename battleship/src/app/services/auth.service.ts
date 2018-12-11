@@ -44,14 +44,6 @@ export class AuthService {
     
   }
 
-
-
-  logoutUser() {
-    console.log(this.isAdmin());
-    localStorage.removeItem('token')
-    this._router.navigate(['/'])
-  }
-
   getToken() {
     return localStorage.getItem('token')
   }

@@ -277,7 +277,7 @@ export class GameComponent {
         
       }
       else {
-        alert("Nope");
+        alert("Non ti è consentito mettere una barca qui");
       }
   }
 
@@ -334,7 +334,7 @@ export class GameComponent {
         console.log("C'è luogo e momento per ogni cosa, ma non ora. Non è il tuo turno.")
       }
     } else {
-        alert ("hai l'autismo?")
+        alert ("Stai cliccando su una casella che hai già cliccato, riprova")
       
     }
 
