@@ -13,17 +13,17 @@
     </h2>
 
     <!-- 1 Fase del gioco: Posizionamento navi -->
-    <div class="posizionamento" *ngIf="players && !gamedata.sent">
+    <div class="posizionamento" *ngIf="!end && players && !gamedata.sent">
 
         <h2>Fase di Posiziamento - Posiziona le tue barche</h2>
 
         <p *ngIf="ship_try.length > 0">Stai posizionando la nave lunga <strong>{{ship_try[0]}}</strong></p>
         <p *ngIf="ship_try.length == 0">Hai terminato le tue barche da posizionare, <strong>completa la fase di posizionamento</strong> per proseguire</p>
 
-        <button *ngIf="players != false && !gamedata.sent" id="cambio" (click)="verPos($event)">Posizionamento Verticale</button>
+        <button *ngIf="players != false && !gamedata.sent" id="cambio" (click)="verPos($event)">Stai posizionando in: Orizzontale</button>
         <button *ngIf="ship_try.length < 3" (click)="deleteShips()">Rimuovi barche</button>
         <!-- ricordarsi di mettere la lunghezza vera dell'array di barche pls.-->
-        <button *ngIf="ship_try.length == 0" (click)="submitBoard()">Fine fase di posizionamento</button>
+        <button *ngIf="ship_try.length == 0" (click)="submitBoard()">Completa la fase di posizionamento</button>
 
     </div>
 
@@ -42,7 +42,7 @@
 
     </div>
 
-    <div *ngIf="gamedata.notOver" class="tabella">
+    <div *ngIf="!end" class="tabella">
 
         <!-- Turno -->
         <div class="posizionamento" *ngIf="gamedata.received && gamedata.sent">
@@ -82,8 +82,9 @@
     <div>
         <br><br><br><br><br><br><br><br><br><br>
 
-        <h1 style="text-align:center" *ngIf="end">Hai Vinto! Complimenti! Per concludere il gioco lascia questa pagina, grazie.</h1>
-        <h1 style="text-align:center" *ngIf="gamedata.loses">Mi spiace, hai perso! Per concludere il gioco lascia questa pagina, grazie.</h1>
+        <h1 style="text-align:center" *ngIf="end && score == 1 ">Hai Vinto! Complimenti! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
+        <h1 style="text-align:center" *ngIf="end && score < 1">Mi spiace, hai perso! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
+        <h1 style="text-align:center" *ngIf="end && score == 1000 ">Hai Vinto! Il tuo Avverario si è ritirato! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
     </div>
 
 </div>

@@ -12,7 +12,8 @@ import { LeaderboardComponent } from './components/leaderboard/leaderboard.compo
 import { UserLoginComponent } from './components/user-login/user-login.component';
 import { AuthService } from './services/auth.service';
 import { UserSignupComponent } from './components/user-signup/user-signup.component';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { CanDeactivateGuard} from './guards/can-deactivate.guard'
 import { TokenInterceptorService} from './services/token-interceptor.service';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { MessagesComponent } from './components/messages/messages.component';
@@ -27,7 +28,7 @@ const appRoutes: Routes = [
   { path: 'signup', component: UserSignupComponent },
   { path: 'delete', component: UserDeleteComponent, canActivate: [AuthGuard]},
   { path: 'message', component: MessagesComponent, canActivate: [AuthGuard]},
-  { path: 'game', component: GameComponent, canActivate: [AuthGuard]},
+  { path: 'game', component: GameComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard]},
   //{ path: '', component: AppComponent },
 ];
 
@@ -50,7 +51,7 @@ const appRoutes: Routes = [
       appRoutes)
 
   ],
-  providers: [DataService, AuthService, AuthGuard,
+  providers: [DataService, AuthService, AuthGuard, CanDeactivateGuard,
   {
     provide: HTTP_INTERCEPTORS,
     useClass:TokenInterceptorService,

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { BoardService } from '../../services/board.service'
-import { AuthService } from 'src/app/services/auth.service';
-import { DataService } from 'src/app/services/data.service';
+import { AuthService } from '../../services/auth.service';
+import { DataService } from '../../services/data.service';
 import io from 'socket.io-client';
-import { Player } from 'src/app/player';
+import { Player } from '../../player';
 import { Board } from '../../board'
+import { THROW_IF_NOT_FOUND } from '@angular/core/src/di/injector';
 
 var gameId: string = '2';
 const board_size: number = 10;
@@ -20,10 +21,10 @@ export class GameComponent {
 
   players: boolean = false;
   myBoard: object[];
-  player: number = 0; 
   end : boolean = false;
-  loss : boolean = false;
   ver: boolean = false;
+  score: number = 0;
+  alone : boolean = false;
 
 //ULTIMA COSA DA SISTEMARE PRE CONSEGNA -> IL NUMERO DI BARCHE GIUSTO!! 
 //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
@@ -37,12 +38,8 @@ export class GameComponent {
 
   gamedata: any = {
     socket: null,
-    gameId: '2',
     numeroGiocatore: "",
     turno: "",
-    score: 0,
-    loses: false,
-    notOver: true,
     sent: false,
     received: false
   };
@@ -53,9 +50,8 @@ export class GameComponent {
   shipPositioning: Function;
   playerOneClick: Function;
   playerArrivoClick: Function;
-  notOver : boolean = true;
   
-  score: number = 0;
+
   username: string = this.authService.getUsername();
   id: string = this.authService.getId();
   
@@ -68,8 +64,6 @@ export class GameComponent {
 
   ngOnInit(): void {
     console.log(gameId);
-    /* this.me.username = this.authService.getUsername();
-    this.me.id = this.authService.getId(); */
 
     var self = this;
 
@@ -85,6 +79,7 @@ export class GameComponent {
       self.gamedata.gameId = data;
       console.log("created game " + self.gamedata.gameId);
       self.gamedata.numeroGiocatore = "1";
+      self.alone = true;
     });
 
     self.gamedata.socket.on('user joined', function (data) {
@@ -93,13 +88,13 @@ export class GameComponent {
       if (self.gamedata.numeroGiocatore == "") {
         self.gamedata.numeroGiocatore = "2";
         self.gamedata.socket.emit('start game');
+        self.alone = false;
       }
     });
 
 
     //scambio boards
     self.gamedata.socket.on('game started', function() {
-      //self.gamedata.gucci = true;
       self.players = true;
       console.log("game started!");
       this.myBoard = self.boardService.createBoard();
@@ -132,9 +127,16 @@ export class GameComponent {
     //partita persa!
     self.gamedata.socket.on('loss', function(data){
       console.log('Your opponent ' + data + ' has won the game');
-      self.gamedata.loses = true
-      self.gamedata.notOver = false;
+      self.end = true;
       self.authService.userLoss(self.username);
+    })
+    
+    //dà la vittoria in caso di abbandono del game
+    self.gamedata.socket.on('win', function(data){
+      console.log('Il tuo avversario ha abbandonato la partita');
+      self.end = true;
+      self.score = 1000;
+      self.authService.userWin(self.username);
     })
 
     
@@ -142,14 +144,13 @@ export class GameComponent {
     self.verPos = function(click: any){
       if (this.ver == false) {
         this.ver = true;
-        console.log("Posizionamento : Verticale");
         var cambio = document.getElementById("cambio");
-        cambio.innerText="Posizionamento Orizzontale";
+        cambio.innerText="Stai posizionando in: Verticale";
       }
       else {
         this.ver = false;
         var cambio = document.getElementById("cambio");
-        cambio.innerText="Posizionamento Verticale";    
+        cambio.innerText="Stai posizionando in: Orizzontale";    
       }
     }
 
@@ -158,11 +159,8 @@ export class GameComponent {
     //controllo posizionamento adeguato delle barche
     self.positionCheck = function(row : number, col : number, ship : number) {
       var _row : number = row;
-      //var fif : number = row;
       var _col : number = col;
-      var good = true;
-      //console.log(this.boards[0].tiles[row--][col].value)
-     
+      var good = true;   
 
       if(this.ver){
         //posizionamenti verticali all'interno del reticolo ed adiacenza ai lati
@@ -248,8 +246,7 @@ export class GameComponent {
       console.log(this.boards[0]);
       return good;
     }
-    //value = 2 -> check se =1 || =2 no room to place
-    
+   
     self.shipPositioning = function(click: any) {
       
       let id = click.target.id,
@@ -316,7 +313,6 @@ export class GameComponent {
               //Vittoria
               self.gamedata.socket.emit('victory', this.username);
               self.authService.userWin(this.username);
-              this.gamedata.notOver = false;
               this.end = true;
             }
           } else {
@@ -324,14 +320,10 @@ export class GameComponent {
               this.boards[1].tiles[row][col].status = 'miss' 
               this.boards[1].tiles[row][col].value = 2;
             }        
-
-        
-        //this.boards[boardId].tiles[row][col].used = true;
-        //this.boards[boardId].tiles[row][col].value = "X";
         return this;
 
       } else {
-        console.log("C'è luogo e momento per ogni cosa, ma non ora. Non è il tuo turno.")
+        alert ("C'è luogo e momento per ogni cosa, ma non ora. Non è il tuo turno.")
       }
     } else {
         alert ("Stai cliccando su una casella che hai già cliccato, riprova")
@@ -404,4 +396,21 @@ export class GameComponent {
   get boards () : Board[] {
     return this.boardService.getBoards()
   } 
+
+  canDeactivate() {
+    if (this.alone) {
+      if(window.confirm('Stai abbandonando la coda, sei sicuro? La tua room verrà distrutta.')){
+        this.gamedata.socket.emit('leavingQueue');
+        return true
+      }
+    } 
+
+    if (!this.end) {
+      if(window.confirm('Stai abbandonando la partita, sei sicuro? Ciò porterà ad una sconfitta.')){
+        this.gamedata.socket.emit('leaving');
+        this.authService.userLoss(this.username);
+        return true
+      }
+    } 
+  }
 } 
