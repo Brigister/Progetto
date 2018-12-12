@@ -16,6 +16,7 @@ export class MessagesComponent implements OnInit {
 
   utente: string = this.auth.getUsername();
   messageData = <any>{};
+  conversationData = <IConversation>{};
   inputVar : string = '';
   todayDate = new Date();
   dateToday = (this.todayDate.getHours() + ':' + this.todayDate.getMinutes() + ' ' 
@@ -61,6 +62,34 @@ export class MessagesComponent implements OnInit {
     });
   }
 
+  createConversation() {
+    debugger;
+    this.auth.isValid(this.conversationData.receiver, (isValid: boolean) => {
+      if (isValid) {
+        this.conversationData.creator = this.auth.getUsername();
+  /*       this.conversationData.message = {
+          id: 'ciao',
+          payload: 'no grazie grazie',
+          date: this.dateToday, 
+        };
+        */
+        this.auth.postMessage(this.conversationData)
+          .subscribe(
+            res => {
+              console.log(this.conversationData);
+            }
+          )
+      }
+      else {
+        console.log("Destinatario inesistente");
+       
+        document.getElementById("error").innerHTML = "non puoi creare una chat con uno che non esiste";
+      }
+
+    });
+  }
+  
+
 }
 
 interface IMessage {
@@ -68,5 +97,18 @@ interface IMessage {
   content: string,
   author: string,
   recipient: string,
+  date: string
+}
+
+interface IConversation {
+  id: string,
+  creator: string,
+  receiver: string,
+  message: IChat
+}
+
+interface IChat {
+  id: string,
+  payload: string
   date: string
 }

@@ -38,6 +38,12 @@ export class DataService {
     return this.http.get('http://localhost:3000/messages/' + username);
   }
 
+  /////////////////////////////////////////////////////////////////////////////////
+
+  public createConversation(conversationData){
+    return this.http.post<any>('http://localhost:3000/', conversationData);
+
+  }
 
   
 } 

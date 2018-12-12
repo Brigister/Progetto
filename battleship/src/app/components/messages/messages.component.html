@@ -23,13 +23,16 @@
     <button (click)="showMessage()">{{message.author}}</button>
 
 
-</div>
- -->
+</div> -->
+
+<!--1 MOSTRARE TUTTI GLI AUTORI SOLO DIVERSI
+    2 MOSTRARE I MESSAGI DEL BOTTONE PREMUTO
+    3 SPOSTARE I MESSAGGI A DESTRA DEI BOTTONI
+  -->
 
 
 
-
-<div *ngFor="let message of messages">
+<!-- <div *ngFor="let message of messages">
     <div *ngIf="message.author == 'eyeleren'">
         <h3>Da: {{message.author}}</h3>
         <p>{{message.date}}</p>
@@ -37,4 +40,20 @@
         <button (click)='delete(message._id)'>Elimina</button>
     </div>
     <hr>
+</div> -->
+
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+
+<div>
+    <form>
+        <h2>stai creando una chat</h2>
+        <label>Utente con cui crei chat</label>
+        <input type="text" [(ngModel)]="conversation.receiver" name="receiver">
+        <input type="submit" click="createConversation()">
+    </form>
 </div>
