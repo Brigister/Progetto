@@ -18,6 +18,7 @@ import { TokenInterceptorService} from './services/token-interceptor.service';
 import { UserDeleteComponent } from './components/user-delete/user-delete.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { GameComponent } from './components/game/game.component';
+import { SearchComponent } from './components/search/search.component';
 
 
 
@@ -29,6 +30,7 @@ const appRoutes: Routes = [
   { path: 'delete', component: UserDeleteComponent, canActivate: [AuthGuard]},
   { path: 'message', component: MessagesComponent, canActivate: [AuthGuard]},
   { path: 'game', component: GameComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard]},
+  { path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
   //{ path: '', component: AppComponent },
 ];
 
@@ -41,6 +43,7 @@ const appRoutes: Routes = [
     UserDeleteComponent,
     MessagesComponent,
     GameComponent,
+    SearchComponent,
     
   ],
   imports: [

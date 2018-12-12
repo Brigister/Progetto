@@ -7,6 +7,7 @@
     <button *ngIf="!_authService.loggedIn()" routerLink="/signup" routerLinkActive="active">Registrati</button>
     <button *ngIf="_authService.loggedIn()" routerLink="/game" routerLinkActive="active">Gioca!</button>
     <button *ngIf="_authService.loggedIn()" routerLink="/leaderboard" routerLinkActive="active">Classifiche</button>
+    <button *ngIf="_authService.loggedIn()" routerLink="/search" routerLinkActive="active">Ricerca Utente</button>
     <button *ngIf="_authService.loggedIn()" routerLink="/message" routerLinkActive="active">Messaggi</button>
     <button *ngIf="_authService.loggedIn() && _authService.isAdmin()" routerLink="/delete" routerLinkActive="active">Gestione Profili</button>
     <button *ngIf="_authService.loggedIn()" routerLink="/" routerLinkActive="active" (click)="_authService.logoutUser()">Logout</button>

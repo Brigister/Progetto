@@ -7,7 +7,7 @@ import { Player } from '../../player';
 import { Board } from '../../board'
 import { THROW_IF_NOT_FOUND } from '@angular/core/src/di/injector';
 
-var gameId: string = '2';
+//var gameId: string = '2';
 const board_size: number = 10;
 
 @Component({
@@ -24,7 +24,7 @@ export class GameComponent {
   end : boolean = false;
   ver: boolean = false;
   score: number = 0;
-  alone : boolean = false;
+  
 
 //ULTIMA COSA DA SISTEMARE PRE CONSEGNA -> IL NUMERO DI BARCHE GIUSTO!! 
 //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
@@ -41,7 +41,8 @@ export class GameComponent {
     numeroGiocatore: "",
     turno: "",
     sent: false,
-    received: false
+    received: false,
+    alone :false
   };
 
   horPos : Function;
@@ -63,7 +64,6 @@ export class GameComponent {
   ) {}
 
   ngOnInit(): void {
-    console.log(gameId);
 
     var self = this;
 
@@ -79,7 +79,8 @@ export class GameComponent {
       self.gamedata.gameId = data;
       console.log("created game " + self.gamedata.gameId);
       self.gamedata.numeroGiocatore = "1";
-      self.alone = true;
+      self.gamedata.alone = true;
+      console.log(self.gamedata.alone);
     });
 
     self.gamedata.socket.on('user joined', function (data) {
@@ -88,7 +89,8 @@ export class GameComponent {
       if (self.gamedata.numeroGiocatore == "") {
         self.gamedata.numeroGiocatore = "2";
         self.gamedata.socket.emit('start game');
-        self.alone = false;
+        self.gamedata.alone = false;
+        console.log(self.gamedata.alone);
       }
     });
 
@@ -135,6 +137,7 @@ export class GameComponent {
     self.gamedata.socket.on('win', function(data){
       console.log('Il tuo avversario ha abbandonato la partita');
       self.end = true;
+      self.gamedata.alone = false;
       self.score = 1000;
       self.authService.userWin(self.username);
     })
@@ -398,7 +401,8 @@ export class GameComponent {
   } 
 
   canDeactivate() {
-    if (this.alone) {
+    console.log(this.gamedata.alone);
+    if (this.gamedata.alone) {
       if(window.confirm('Stai abbandonando la coda, sei sicuro? La tua room verrà distrutta.')){
         this.gamedata.socket.emit('leavingQueue');
         return true
@@ -412,5 +416,6 @@ export class GameComponent {
         return true
       }
     } 
+    else return true;
   }
 } 

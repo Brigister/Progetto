@@ -1,0 +1,35 @@
+button {
+    width: 120px;
+    border-radius: 10px;
+    background-color: gainsboro;
+    margin-left: 50px;
+}
+
+label {
+    display: inline-block;
+    margin-right: 50px;
+    text-align: left;
+    width: 120px;
+}
+
+input {
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.posizione {
+    text-align: center;
+}
+
+.statistiche {
+    display: inline-block;
+    text-align: center;
+    width: 20%
+}
+
+.info {
+    margin-top: 50px;
+}

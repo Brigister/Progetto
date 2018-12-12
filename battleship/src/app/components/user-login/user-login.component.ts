@@ -15,6 +15,7 @@ export class UserLoginComponent implements OnInit {
   }
 
   loginUser(){
+    debugger;
     this._auth.loginUser(this.loginUserData)
     .subscribe(
       res => {
@@ -25,5 +26,5 @@ export class UserLoginComponent implements OnInit {
       err => console.log(err)
     )
   }
-  
+
 }

@@ -1,0 +1,30 @@
+<div class="posizione">
+    <h2>Ricerca un Utente</h2>
+    <form>
+        <label>Utente da cercare:</label>
+        <input [(ngModel)]="searched" name="searched" type="text" placeholder="inserisci qui l'utente da cercare">
+        <button (click)="userStatistics(searched)">Cerca</button>
+    </form>
+
+
+
+    <div class="info" *ngIf="statistics">
+
+        <hr>
+
+        <div class="statistiche "><strong>Username</strong></div>
+        <div class="statistiche "><strong>Vittorie</strong></div>
+        <div class="statistiche "><strong>Sconfitte</strong></div>
+        <div class="statistiche "><strong>Giocate</strong></div>
+
+        <hr>
+
+        <h2 class="statistiche">{{statistics.username}}</h2>
+        <div class="statistiche">{{statistics.win}} </div>
+        <div class="statistiche">{{statistics.losses}} </div>
+        <div class="statistiche">{{statistics.win+statistics.losses}}</div>
+
+    </div>
+
+
+</div>

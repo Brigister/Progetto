@@ -6,6 +6,8 @@ import { Router } from '@angular/router'
 
 @Injectable()
 export class DataService {
+  
+  _statistics = 'http://localhost:3000/user/';
 
   constructor(public http:HttpClient, private _router: Router) { 
   }
@@ -18,6 +20,10 @@ export class DataService {
   public getUsers(){
     return this.http.get('http://localhost:3000/user');
           };
+
+  public getStatistics(username : string) {
+    return this.http.get(this._statistics + username + "/statistics")
+  };
   
   public getAdmin(){
     return this.http.get('http://localhost:3000/user' )
@@ -31,6 +37,7 @@ export class DataService {
   public getMessages(username : string){
     return this.http.get('http://localhost:3000/messages/' + username);
   }
+
 
   
 } 
