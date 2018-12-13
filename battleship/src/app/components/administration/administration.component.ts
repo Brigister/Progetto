@@ -4,11 +4,11 @@ import { DataService } from '../../services/data.service';
 
 
 @Component({
-  selector: 'app-user-delete',
-  templateUrl: './user-delete.component.html',
-  styleUrls: ['./user-delete.component.css']
+  selector: 'app-administration',
+  templateUrl: './administration.component.html',
+  styleUrls: ['./administration.component.css']
 })
-export class UserDeleteComponent implements OnInit {
+export class AdministrationComponent implements OnInit {
 
   constructor( public http:DataService) { }
     users: IUser[];
@@ -18,11 +18,21 @@ export class UserDeleteComponent implements OnInit {
     location.reload();
   }
 
+  upgrade(username : string) {
+    this.http.upgradeUser(username);
+    location.reload();
+  }
+
+  downgrade(username : string) {
+    this.http.downgradeUser(username);
+    location.reload();
+  }
+
   ngOnInit() {
     this.http.getUsers().subscribe((data: any) => {
       console.log(data);
       this.users = data.user;
   })
 
-}
+  } 
 }

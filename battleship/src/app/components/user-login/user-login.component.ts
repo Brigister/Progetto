@@ -15,7 +15,6 @@ export class UserLoginComponent implements OnInit {
   }
 
   loginUser(){
-    debugger;
     this._auth.loginUser(this.loginUserData)
     .subscribe(
       res => {
@@ -23,7 +22,10 @@ export class UserLoginComponent implements OnInit {
         localStorage.setItem('token', res.token);
         this._router.navigate(["/leaderboard"])
       },
-      err => console.log(err)
+      err => {
+        console.log(err)
+        document.getElementById("fail").innerText="I dati inseriti non sono corretti"
+      }
     )
   }
 

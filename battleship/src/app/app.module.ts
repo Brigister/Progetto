@@ -15,7 +15,7 @@ import { UserSignupComponent } from './components/user-signup/user-signup.compon
 import { AuthGuard } from './guards/auth.guard';
 import { CanDeactivateGuard} from './guards/can-deactivate.guard'
 import { TokenInterceptorService} from './services/token-interceptor.service';
-import { UserDeleteComponent } from './components/user-delete/user-delete.component';
+import { AdministrationComponent } from './components/administration/administration.component';
 import { MessagesComponent } from './components/messages/messages.component';
 import { GameComponent } from './components/game/game.component';
 import { SearchComponent } from './components/search/search.component';
@@ -27,7 +27,7 @@ const appRoutes: Routes = [
   { path: 'login', component: UserLoginComponent },
   { path: 'leaderboard', component: LeaderboardComponent, canActivate: [AuthGuard]},
   { path: 'signup', component: UserSignupComponent },
-  { path: 'delete', component: UserDeleteComponent, canActivate: [AuthGuard]},
+  { path: 'administration', component: AdministrationComponent, canActivate: [AuthGuard]},
   { path: 'message', component: MessagesComponent, canActivate: [AuthGuard]},
   { path: 'game', component: GameComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard]},
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
@@ -40,7 +40,7 @@ const appRoutes: Routes = [
     LeaderboardComponent,
     UserLoginComponent,
     UserSignupComponent,
-    UserDeleteComponent,
+    AdministrationComponent,
     MessagesComponent,
     GameComponent,
     SearchComponent,

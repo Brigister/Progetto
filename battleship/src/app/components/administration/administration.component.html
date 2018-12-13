@@ -14,6 +14,8 @@
     </ul>
 
     <button (click)='delete(user._id)'>Elimina</button>
+    <button *ngIf="!user.isAdmin" (click)='upgrade(user.username)'>Upgrade</button>
+    <button *ngIf="user.isAdmin" (click)='downgrade(user.username)'>Downgrade</button>
 
     <hr>
 </div>

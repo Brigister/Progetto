@@ -29,6 +29,16 @@ export class DataService {
     return this.http.get('http://localhost:3000/user' )
   }       
 
+  public upgradeUser(username : string){
+    return this.http.patch('http://localhost:3000/user/' + username + '/upgrade', null).subscribe((data) =>
+    console.log('SUCC'));
+  }
+
+  public downgradeUser(username : string){
+    return this.http.patch('http://localhost:3000/user/' + username + '/downgrade', null).subscribe((data) =>
+    console.log('SUCC'));
+  }
+
   public userDelete(id: string): void{
     this.http.delete('http://localhost:3000/user/' + id).subscribe((data) =>
     console.log('SUCC'));

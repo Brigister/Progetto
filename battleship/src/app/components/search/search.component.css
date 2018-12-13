@@ -20,6 +20,10 @@ input {
     width: 200px;
 }
 
+form {
+    margin-bottom: 20px;
+}
+
 .posizione {
     text-align: center;
 }
@@ -32,4 +36,8 @@ input {
 
 .info {
     margin-top: 50px;
+}
+
+#fail {
+    color: red;
 }

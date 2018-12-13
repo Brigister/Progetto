@@ -23,7 +23,9 @@ export class UserSignupComponent implements OnInit {
         //localStorage.setItem('token', res.token)
         this._router.navigate(['/login'])
       },
-      err => console.log(err)
+      err => { console.log(err)
+      document.getElementById("fail").innerText="I dati inseriti non sono corretti"
+      }
     )      
   }
 

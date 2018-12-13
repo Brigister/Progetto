@@ -20,3 +20,7 @@ button {
 #login {
     text-align: center;
 }
+
+#fail {
+    color: red;
+}

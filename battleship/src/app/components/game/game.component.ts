@@ -5,9 +5,7 @@ import { DataService } from '../../services/data.service';
 import io from 'socket.io-client';
 import { Player } from '../../player';
 import { Board } from '../../board'
-import { THROW_IF_NOT_FOUND } from '@angular/core/src/di/injector';
 
-//var gameId: string = '2';
 const board_size: number = 10;
 
 @Component({

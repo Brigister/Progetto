@@ -10,18 +10,20 @@ import {IUser} from '../../iuser'
 })
 export class LeaderboardComponent {
   users: IUser[];
-  
 
   constructor(public http: DataService) {
   }
 
-
+  
   ngOnInit(): void {
 
     this.http.getUsers().subscribe((data: any) => {
       console.log(data);
       this.users = data.user;    
+      console.log(this.users);
+      
     })
-    
+  
   }
 }
+

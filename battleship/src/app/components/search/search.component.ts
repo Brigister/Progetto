@@ -18,9 +18,19 @@ export class SearchComponent implements OnInit {
     return this.dataService.getStatistics(searched).subscribe((data:any) => {
     console.log(data);
     this.statistics = data.user;
+    document.getElementById("fail").style.display ="none";
+     
+    
     
 
-    });
+    },
+    err => {
+    console.log(err)
+    document.getElementById("fail").style.display ="initial";
+    document.getElementById("fail").innerText="I dati inseriti non sono corretti"
+        
+    }
+    );
     
    
   }
