@@ -9,7 +9,7 @@ export class AuthService {
   private _registerUrl = "http://localhost:3000/user/signup"; 
   private _loginUrl = "http://localhost:3000/user/login"; 
   private _messageUrl = "http://localhost:3000/messages"; 
-  private _checkUrl = "http://localhost:3000/user/"; 
+  private _userUrl = "http://localhost:3000/user/"; 
  
   constructor(private http: HttpClient, 
               private _router: Router) { } 
@@ -23,19 +23,19 @@ export class AuthService {
   } 
  
   isValid(username : string, callback: Function): any{ 
-    this.http.get<any>(this._checkUrl + username + "/check").subscribe((data: any) => { 
+    this.http.get<any>(this._userUrl + username + "/check").subscribe((data: any) => { 
       callback(data); 
     }) 
      
   } 
  
   userWin(username: string): void{ 
-    this.http.patch(this._checkUrl + username + "/win", null).subscribe((data) => 
+    this.http.patch(this._userUrl + username + "/win", null).subscribe((data) => 
     console.log('SUCC')); 
   } 
  
   userLoss(username: string): void{ 
-    this.http.patch(this._checkUrl + username + "/loss", null).subscribe((data) => 
+    this.http.patch(this._userUrl + username + "/loss", null).subscribe((data) => 
     console.log('SUCC')); 
   } 
    
