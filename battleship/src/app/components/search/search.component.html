@@ -14,17 +14,32 @@
 
         <hr>
 
-        <div class="statistiche "><strong>Username</strong></div>
-        <div class="statistiche "><strong>Vittorie</strong></div>
-        <div class="statistiche "><strong>Sconfitte</strong></div>
-        <div class="statistiche "><strong>Giocate</strong></div>
+        <div class="statistiche">
+            <h3>Username</h3>
+        </div>
+        <div class="statistiche">
+            <h3>Vittorie</h3>
+        </div>
+        <div class="statistiche">
+            <h3>Sconfitte</h3>
+        </div>
+        <div class="statistiche">
+            <h3>Giocate</h3>
+        </div>
 
         <hr>
 
-        <h2 class="statistiche">{{statistics.username}}</h2>
-        <div class="statistiche">{{statistics.win}} </div>
-        <div class="statistiche">{{statistics.losses}} </div>
-        <div class="statistiche">{{statistics.win+statistics.losses}}</div>
-
+        <div class="statistiche">
+            <p id="username"><strong>{{statistics.username}}</strong></p>
+        </div>
+        <div class="statistiche">
+            <p>{{statistics.win}} </p>
+        </div>
+        <div class="statistiche">
+            <p>{{statistics.losses}} </p>
+        </div>
+        <div class="statistiche">
+            <p>{{statistics.win+statistics.losses}} </p>
+        </div>
     </div>
 </div>

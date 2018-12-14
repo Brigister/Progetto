@@ -13,8 +13,7 @@ export class DataService {
   } 
  
   public deleteMessage(id : string){ 
-    this.http.delete(this._messagesUrl + id).subscribe((data) => 
-    console.log('SUCC')); 
+    this.http.delete(this._messagesUrl + id).subscribe() 
   } 
  
   public getUsers(){ 
@@ -26,23 +25,20 @@ export class DataService {
   }; 
    
   public getAdmin(){ 
-    return this.http.get(this._userUrl ) 
+    return this.http.get(this._userUrl) 
   }        
  
   public upgradeUser(username : string){ 
-    return this.http.patch(this._userUrl + username + '/upgrade', null).subscribe((data) => 
-    console.log('SUCC')); 
+    return this.http.patch(this._userUrl + username + '/upgrade', null).subscribe()
   } 
  
   public downgradeUser(username : string){ 
-    return this.http.patch(this._userUrl + username + '/downgrade', null).subscribe((data) => 
-    console.log('SUCC')); 
+    return this.http.patch(this._userUrl + username + '/downgrade', null).subscribe()
   } 
  
 
   public userDelete(id: string): void{ 
-    this.http.delete(this._userUrl + id).subscribe((data) => 
-    console.log('SUCC')); 
+    this.http.delete(this._userUrl + id).subscribe()
   } 
  
   public getMessages(username : string){ 

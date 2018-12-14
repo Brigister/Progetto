@@ -73,7 +73,7 @@ export class GameComponent {
       console.log('loggato');
     })
 
-    self.gamedata.socket.on('new game', function (data) {
+    self.gamedata.socket.on('create lobby', function (data) {
       self.gamedata.gameId = data;
       console.log("created game " + self.gamedata.gameId);
       self.gamedata.numeroGiocatore = "1";
@@ -81,30 +81,29 @@ export class GameComponent {
       console.log(self.gamedata.alone);
     });
 
-    self.gamedata.socket.on('user joined', function (data) {
+    self.gamedata.socket.on('entering lobby', function (data) {
       self.gamedata.gameId = data;
       console.log("player joined game " + self.gamedata.gameId);
       if (self.gamedata.numeroGiocatore == "") {
         self.gamedata.numeroGiocatore = "2";
-        self.gamedata.socket.emit('start game');
-        self.gamedata.alone = false;
+        self.gamedata.socket.emit('on start');
         console.log(self.gamedata.alone);
       }
     });
 
 
     //scambio boards
-    self.gamedata.socket.on('game started', function() {
+    self.gamedata.socket.on('on game start', function() {
       self.players = true;
-      console.log("game started!");
+      console.log("La partita è cominciata!");
+      self.gamedata.alone = false;
       this.myBoard = self.boardService.createBoard();
-      
       console.log(this.myBoard);
-      //self.gamedata.socket.emit('scambio', this.myBoard)
+    
     });
 
     //ricezione boards
-    self.gamedata.socket.on('ack2', function(data){
+    self.gamedata.socket.on('receive board', function(data){
       console.log('ricevo board');
       
       let board = new Board({
@@ -118,24 +117,23 @@ export class GameComponent {
     })
 
 
-    self.gamedata.socket.on('turn', function(nuovoTurno) {
+    self.gamedata.socket.on('change turn', function(nuovoTurno) {
       //gestione colpo di cannone** 
       self.gamedata.turno = nuovoTurno;
       console.log(self.gamedata.turno);
     })
 
     //partita persa!
-    self.gamedata.socket.on('loss', function(data){
-      console.log('Your opponent ' + data + ' has won the game');
+    self.gamedata.socket.on('on loss', function(data){
+      console.log(data + ' ha vinto la partita');
       self.end = true;
       self.authService.userLoss(self.username);
     })
     
     //dà la vittoria in caso di abbandono del game
-    self.gamedata.socket.on('win', function(data){
+    self.gamedata.socket.on('win by quit', function(data){
       console.log('Il tuo avversario ha abbandonato la partita');
       self.end = true;
-      self.gamedata.alone = false;
       self.score = 1000;
       self.authService.userWin(self.username);
     })
@@ -288,13 +286,13 @@ export class GameComponent {
       row = id.substring(2,3), col = id.substring(3,4),
       tile = this.boards[1].tiles[row][col];
       console.log(tile);
-      this.gamedata.socket.emit('click', id);
+      this.gamedata.socket.emit('on fire', id);
 
      if (this.checkValidHit(tile)) {
          //necessario per evento server : hit e informazioni turno del giocatore
       if (self.gamedata.turno == self.gamedata.numeroGiocatore) {
         console.log("Turno di " + self.gamedata.turno)
-        self.gamedata.socket.emit('hit', self.gamedata.turno);
+        self.gamedata.socket.emit('click tile', self.gamedata.turno);
         self.gamedata.turno = self.gamedata.turno == "1" ? "2" : "1";
 
           if (tile.value == 1) {
@@ -312,9 +310,10 @@ export class GameComponent {
   //------->>>>>>>>>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<------------
 
               //Vittoria
-              self.gamedata.socket.emit('victory', this.username);
-              self.authService.userWin(this.username);
+              self.gamedata.socket.emit('on victory', this.username);
               this.end = true;
+              self.authService.userWin(this.username);
+              
             }
           } else {
               //acqua
@@ -335,7 +334,7 @@ export class GameComponent {
     //-----------------------------
 
 
-    self.gamedata.socket.on('arrivoClick', function(data) {
+    self.gamedata.socket.on('fire in the hole', function(data) {
       //Gestione colpo
       self.playerArrivoClick(data);
       console.log(data);
@@ -370,7 +369,7 @@ export class GameComponent {
 
   submitBoard(){
     this.myBoard = this.boards[0].tiles;
-    this.gamedata.socket.emit('ack1', this.boards[0].tiles);
+    this.gamedata.socket.emit('submit board', this.boards[0].tiles);
     this.gamedata.sent = true;
     console.log(this.boards)
     return;
@@ -402,14 +401,15 @@ export class GameComponent {
     console.log(this.gamedata.alone);
     if (this.gamedata.alone) {
       if(window.confirm('Stai abbandonando la coda, sei sicuro? La tua room verrà distrutta.')){
-        this.gamedata.socket.emit('leavingQueue');
+        this.gamedata.socket.emit('on leaving queue');
         return true
       }
     } 
 
     if (!this.end) {
       if(window.confirm('Stai abbandonando la partita, sei sicuro? Ciò porterà ad una sconfitta.')){
-        this.gamedata.socket.emit('leaving');
+        this.gamedata.socket.emit('on leaving');
+        //non posso fare il to('' + gameId perchè mi dice che è undefined ???????????)
         this.authService.userLoss(this.username);
         return true
       }

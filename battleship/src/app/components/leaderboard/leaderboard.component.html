@@ -8,20 +8,30 @@
 
     <hr>
 
-    <div class="statistiche "><strong>Posizione</strong></div>
-    <div class="statistiche "><strong>Username</strong></div>
-    <div class="statistiche "><strong>Vittorie</strong></div>
-    <div class="statistiche "><strong>Sconfitte</strong></div>
-    <div class="statistiche "><strong>Giocate</strong></div>
+    <div class="statistiche">
+        <h1>Posizione</h1>
+    </div>
+    <div class="statistiche">
+        <h1>Username</h1>
+    </div>
+    <div class="statistiche">
+        <h1>Vittorie</h1>
+    </div>
+    <div class="statistiche">
+        <h1>Sconfitte</h1>
+    </div>
+    <div class="statistiche">
+        <h1>Giocate</h1>
+    </div>
 
     <hr>
 
     <div id="23classificato " *ngFor="let user of users | slice:0:3; index as i ">
         <h1 class="statistiche">{{(i+1 == 1) ? "🥇": ((i+1 == 2) ?"🥈" : "🥉")}}</h1>
         <h2 class="statistiche">{{user.username}}</h2>
-        <div class="statistiche">{{user.win}} </div>
-        <div class="statistiche">{{user.losses}} </div>
-        <div class="statistiche">{{user.win+user.losses}}</div>
+        <p class="statistiche">{{user.win}} </p>
+        <p class="statistiche">{{user.losses}} </p>
+        <p class="statistiche">{{user.win+user.losses}}</p>
         <hr>
     </div>
 
@@ -31,9 +41,9 @@
     <div *ngFor="let user of users | slice:3:10; index as i">
         <h1 class="statistiche ">{{i+4}}°</h1>
         <h2 class="statistiche ">{{user.username}}</h2>
-        <div class="statistiche ">{{user.win}} </div>
-        <div class="statistiche ">{{user.losses}} </div>
-        <div class="statistiche ">{{user.win+user.losses}}</div>
+        <p class="statistiche ">{{user.win}} </p>
+        <p class="statistiche ">{{user.losses}} </p>
+        <p class="statistiche ">{{user.win+user.losses}}</p>
         <hr>
 
     </div>
@@ -90,4 +100,4 @@ table, th, td {
       </table>
       -->
 
-</body>
+</body>1

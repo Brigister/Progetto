@@ -1,7 +1,6 @@
-<h2>Utenti</h2>
-<hr>
+<h2>Lista Utenti</h2>
 
-<div *ngFor="let user of users">
+<!-- <p *ngFor="let user of users">
     <h3>{{user.username}}</h3>
 
     <h4>Informazioni Utente</h4>
@@ -18,4 +17,49 @@
     <button *ngIf="user.isAdmin" (click)='downgrade(user.username)'>Downgrade</button>
 
     <hr>
+</p>
+ -->
+
+<hr>
+
+<div class="statistiche">
+    <h3>Username</h3>
 </div>
+<div class="statistiche">
+    <h3>Email</h3>
+</div>
+<div class="statistiche">
+    <h3>User Id</h3>
+</div>
+<div class="statistiche">
+    <h3>Status</h3>
+</div>
+
+<hr>
+
+<div class="info" *ngFor="let user of users">
+
+
+    <div class="statistiche">
+        <p id="username"><strong>{{user.username}}</strong></p>
+    </div>
+    <div class="statistiche">
+        <p>{{user.email}} </p>
+    </div>
+    <div class="statistiche">
+        <p>{{user._id}} </p>
+    </div>
+    <div class="statistiche" *ngIf="user.isAdmin">
+        <p>Admin</p>
+    </div>
+    <div class="statistiche" *ngIf="!user.isAdmin">
+        <p>Utente</p>
+    </div>
+    <button class="status" (click)='delete(user._id)'>Elimina</button>
+    <button class="status" *ngIf="!user.isAdmin" (click)='upgrade(user.username)'>Upgrade</button>
+    <button class="status" *ngIf="user.isAdmin" (click)='downgrade(user.username)'>Downgrade</button>
+
+    <hr>
+
+</div>
+<!-- </p> -->
