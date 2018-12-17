@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { HttpClient } from '@angular/common/http';
-import {IUser} from '../../iuser'
+
+import {IUser} from '../../interfaces/iuser'
 
 @Component({
   selector: 'app-leaderboard',

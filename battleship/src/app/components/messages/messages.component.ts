@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
-import { NgStyle } from '@angular/common';
+import { IMessage} from '../../interfaces/imessage'
+
 
 @Component({
   selector: 'app-messages',
@@ -15,7 +15,6 @@ export class MessagesComponent implements OnInit {
 
   messages: IMessage[];
   chats : string[];
-  gianni: string ="trollololol";
   utente: string = this.auth.getUsername();
   active : string;
   messageData = <any>{};
@@ -42,13 +41,16 @@ export class MessagesComponent implements OnInit {
             res => {
               console.log(this.messageData)
             },
-            err => console.log(err)
+            err =>{console.log(err)
+            document.getElementById("error").innerText = "Messaggio vuoto, prego inserire un messaggio";
+            }
+
           )
       }
       else {
         console.log("Destinatario inesistente");
        
-        document.getElementById("error").innerHTML = "𝓓𝓮𝓼𝓽𝓲𝓷𝓪𝓽𝓪𝓻𝓲𝓸 𝓲𝓷𝓮𝓼𝓲𝓼𝓽𝓮𝓷𝓽𝓮";
+        document.getElementById("error").innerText = "Destinatario inesistente";
 
       }
     });
@@ -62,12 +64,4 @@ export class MessagesComponent implements OnInit {
     }) 
   }
 
-}
-
-interface IMessage {
-  id: string,
-  content: string,
-  author: string,
-  recipient: string,
-  date: string
 }

@@ -3,3 +3,11 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
+
+button:focus {
+    outline: none;
+}
+
+input:focus {
+    outline: none;
+}

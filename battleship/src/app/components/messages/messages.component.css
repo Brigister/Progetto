@@ -1,18 +1,4 @@
-button:focus {
-    outline: none;
-}
-
-input[type=submit] {
-    border-radius: 38px;
-    background-color: gainsboro;
-    min-width: 200px;
-    padding: 10px;
-    border: 1px solid #bbb;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
-}
-
-
-/*  FORMSS  */
+/*  FORM  */
 
 textarea {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -34,7 +20,7 @@ input[type=submit] {
 
 #form {
     background-color: #f3f3f3;
-    padding: 20px;
+    padding: 50px;
 }
 
 #form .flex {
@@ -84,10 +70,6 @@ input[type=submit] {
 
 .chats .button:hover {
     background-color: #eee;
-}
-
-.chats .button:active {
-    /* background-color: #00ffba; */
 }
 
 .chats .button.selected {
