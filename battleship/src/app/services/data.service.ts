@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';  
 import { HttpClient } from '@angular/common/http'; 
-import { Router } from '@angular/router' 
  
 @Injectable() 
 export class DataService { 
    
   private _userUrl = 'http://localhost:3000/user/'; 
   private _messagesUrl = 'http://localhost:3000/messages/'; 
-  private _baseUrl = 'http://localhost:3000/'; 
- 
-  constructor(public http:HttpClient, private _router: Router) {  
+
+  constructor(public http:HttpClient) {  
   } 
  
   public deleteMessage(id : string){ 
@@ -36,7 +34,6 @@ export class DataService {
     return this.http.patch(this._userUrl + username + '/downgrade', null).subscribe()
   } 
  
-
   public userDelete(id: string): void{ 
     this.http.delete(this._userUrl + id).subscribe()
   } 
@@ -45,14 +42,13 @@ export class DataService {
     return this.http.get(this._messagesUrl + username); 
   } 
  
-  ///////////////////////////////////////////////////////////////////////////////// 
- 
-  public createConversation(conversationData){ 
-    return this.http.post<any>(this._baseUrl, conversationData); 
- 
-  } 
- 
-   
+  public getChats(username : string) {
+    return this.http.get(this._messagesUrl + username + '/conversations');
+  }  
+
+  public getChatsMessages(user1 : string, user2 : string) {
+    return this.http.get(this._messagesUrl + user1 + '/' + user2 + '/payload');
+  }
 }  
  
   

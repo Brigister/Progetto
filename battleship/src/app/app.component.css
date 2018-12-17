@@ -4,3 +4,7 @@ button {
     background-color: gainsboro;
     margin: 5px;
 }
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+}

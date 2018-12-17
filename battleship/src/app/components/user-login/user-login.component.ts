@@ -19,7 +19,7 @@ export class UserLoginComponent implements OnInit {
     .subscribe(
       res => {
         console.log(res);
-        localStorage.setItem('token', res.token);
+        sessionStorage.setItem('token', res.token);
         this._router.navigate(["/leaderboard"])
       },
       err => {

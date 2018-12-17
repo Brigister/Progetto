@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import * as JWT from "jwt-decode" 
  
 @Injectable() 
-export class AuthService { 
+export class AuthService {
+ 
  
   private _registerUrl = "http://localhost:3000/user/signup"; 
   private _loginUrl = "http://localhost:3000/user/login"; 
@@ -45,16 +46,16 @@ export class AuthService {
   } 
  
   logoutUser() { 
-    localStorage.removeItem('token') 
+    sessionStorage.removeItem('token') 
     this._router.navigate(['/']) 
   } 
    
   getToken() { 
-    return localStorage.getItem('token') 
+    return sessionStorage.getItem('token') 
   } 
  
   loggedIn() { 
-    return !!localStorage.getItem('token')     
+    return !!sessionStorage.getItem('token')     
   } 
  
   getId() : string { 
@@ -74,8 +75,11 @@ export class AuthService {
  
   isAdmin() : boolean { 
     const token = <any>JWT(this.getToken()); 
-    if (token.isAdmin == true){ 
-    return true } 
-    else {return false} 
-    } 
+    return token.isAdmin;
   }
+
+  getConversationId() {
+    const token = <any>JWT(this.getToken()); 
+    return token.conversationId;
+  }
+}

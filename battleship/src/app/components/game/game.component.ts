@@ -37,10 +37,11 @@ export class GameComponent {
   gamedata: any = {
     socket: null,
     numeroGiocatore: "",
-    turno: "",
+    turno : "",
     sent: false,
     received: false,
     alone :false
+    
   };
 
   horPos : Function;
@@ -77,7 +78,9 @@ export class GameComponent {
       self.gamedata.gameId = data;
       console.log("created game " + self.gamedata.gameId);
       self.gamedata.numeroGiocatore = "1";
+      console.log(self.gamedata.numeroGiocatore);
       self.gamedata.alone = true;
+
       console.log(self.gamedata.alone);
     });
 
@@ -86,6 +89,7 @@ export class GameComponent {
       console.log("player joined game " + self.gamedata.gameId);
       if (self.gamedata.numeroGiocatore == "") {
         self.gamedata.numeroGiocatore = "2";
+        console.log(self.gamedata.numeroGiocatore);
         self.gamedata.socket.emit('on start');
         console.log(self.gamedata.alone);
       }
@@ -95,8 +99,9 @@ export class GameComponent {
     //scambio boards
     self.gamedata.socket.on('on game start', function() {
       self.players = true;
-      console.log("La partita è cominciata!");
       self.gamedata.alone = false;
+      
+      console.log("La partita è cominciata!");
       this.myBoard = self.boardService.createBoard();
       console.log(this.myBoard);
     
@@ -113,15 +118,16 @@ export class GameComponent {
       self.boardService.boards.push(board);
       console.log(data);
       
+      console.log('Turno' + self.gamedata.turno);
+      console.log('Giocatore' + self.gamedata.giocatore);
       self.gamedata.received = true;
     })
 
-
-    self.gamedata.socket.on('change turn', function(nuovoTurno) {
-      //gestione colpo di cannone** 
-      self.gamedata.turno = nuovoTurno;
-      console.log(self.gamedata.turno);
-    })
+    //cambio turno da ricezione evento server
+    self.gamedata.socket.on('change turn', function(newTurn) {
+      self.gamedata.turno = newTurn;
+      console.log('Turno' + self.gamedata.turno);
+    }) 
 
     //partita persa!
     self.gamedata.socket.on('on loss', function(data){
@@ -143,17 +149,13 @@ export class GameComponent {
     self.verPos = function(click: any){
       if (this.ver == false) {
         this.ver = true;
-        var cambio = document.getElementById("cambio");
-        cambio.innerText="Stai posizionando in: Verticale";
+        document.getElementById("cambio").innerText="Stai posizionando in: Verticale";
       }
       else {
         this.ver = false;
-        var cambio = document.getElementById("cambio");
-        cambio.innerText="Stai posizionando in: Orizzontale";    
+        document.getElementById("cambio").innerText="Stai posizionando in: Orizzontale";
       }
     }
-
-
 
     //controllo posizionamento adeguato delle barche
     self.positionCheck = function(row : number, col : number, ship : number) {
@@ -291,9 +293,10 @@ export class GameComponent {
      if (this.checkValidHit(tile)) {
          //necessario per evento server : hit e informazioni turno del giocatore
       if (self.gamedata.turno == self.gamedata.numeroGiocatore) {
-        console.log("Turno di " + self.gamedata.turno)
         self.gamedata.socket.emit('click tile', self.gamedata.turno);
+        //cambia il turno a quello che ha cliccato
         self.gamedata.turno = self.gamedata.turno == "1" ? "2" : "1";
+        console.log("Turno di " + self.gamedata.turno)
 
           if (tile.value == 1) {
             //colpo di cannone
@@ -311,8 +314,8 @@ export class GameComponent {
 
               //Vittoria
               self.gamedata.socket.emit('on victory', this.username);
-              this.end = true;
               self.authService.userWin(this.username);
+              this.end = true;
               
             }
           } else {
@@ -331,11 +334,9 @@ export class GameComponent {
     }
 
     }
-    //-----------------------------
 
-
+    //visualizza il colpo sulla board dell'avversario
     self.gamedata.socket.on('fire in the hole', function(data) {
-      //Gestione colpo
       self.playerArrivoClick(data);
       console.log(data);
     })
@@ -407,9 +408,12 @@ export class GameComponent {
     } 
 
     if (!this.end) {
+      console.log(this.gamedata.gameId);
       if(window.confirm('Stai abbandonando la partita, sei sicuro? Ciò porterà ad una sconfitta.')){
+        console.log(this.gamedata.gameId);
         this.gamedata.socket.emit('on leaving');
-        //non posso fare il to('' + gameId perchè mi dice che è undefined ???????????)
+        //this.gamedata.socket.to('' + this.gamedata.gameId).broadcast.emit('on leaving');
+        //non posso fare il to('' + gameId perchè mi dice che non è una funzione???????????)
         this.authService.userLoss(this.username);
         return true
       }

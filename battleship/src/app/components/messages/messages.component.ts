@@ -12,31 +12,24 @@ import { NgStyle } from '@angular/common';
 export class MessagesComponent implements OnInit {
 
   constructor(public http: DataService, public auth: AuthService) { }
-  messages: IMessage[];
 
+  messages: IMessage[];
+  chats : string[];
+  gianni: string ="trollololol";
   utente: string = this.auth.getUsername();
+  active : string;
   messageData = <any>{};
-  conversationData = <IConversation>{};
-  inputVar : string = '';
   todayDate = new Date();
   dateToday = (this.todayDate.getHours() + ':' + this.todayDate.getMinutes() + ' ' 
               + this.todayDate.getDate() + '-' + ((this.todayDate.getMonth() + 1)) + '-' + this.todayDate.getFullYear());
   
-
   ngOnInit() {
     console.log(this.utente);
 
-    this.http.getMessages(this.utente).subscribe((data: any) => {
-      console.log(data);
-      this.messages = data.message;
-      console.log(this.messages);
+    this.http.getChats(this.utente).subscribe((data: any) => {
+      this.chats = data.message;
+      console.log(this.chats);
     })
-  }
-
-  delete(id: string){
-    console.log("succ");
-    this.http.deleteMessage(id);
-    location.reload();
   }
 
   postMessage() {
@@ -48,7 +41,6 @@ export class MessagesComponent implements OnInit {
           .subscribe(
             res => {
               console.log(this.messageData)
-              location.reload();
             },
             err => console.log(err)
           )
@@ -62,33 +54,13 @@ export class MessagesComponent implements OnInit {
     });
   }
 
-  createConversation() {
-    debugger;
-    this.auth.isValid(this.conversationData.receiver, (isValid: boolean) => {
-      if (isValid) {
-        this.conversationData.creator = this.auth.getUsername();
-  /*       this.conversationData.message = {
-          id: 'ciao',
-          payload: 'no grazie grazie',
-          date: this.dateToday, 
-        };
-        */
-        this.auth.postMessage(this.conversationData)
-          .subscribe(
-            res => {
-              console.log(this.conversationData);
-            }
-          )
-      }
-      else {
-        console.log("Destinatario inesistente");
-       
-        document.getElementById("error").innerHTML = "non puoi creare una chat con uno che non esiste";
-      }
-
-    });
+  showMessages(username : string){
+    this.active = username;
+    this.http.getChatsMessages(this.utente , username).subscribe((data : any) => {
+      this.messages = data.message
+      console.log(this.messages);
+    }) 
   }
-  
 
 }
 
@@ -97,18 +69,5 @@ interface IMessage {
   content: string,
   author: string,
   recipient: string,
-  date: string
-}
-
-interface IConversation {
-  id: string,
-  creator: string,
-  receiver: string,
-  message: IChat
-}
-
-interface IChat {
-  id: string,
-  payload: string
   date: string
 }

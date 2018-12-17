@@ -1,10 +1,128 @@
-textarea {
-    margin-bottom: 15px;
+button:focus {
+    outline: none;
 }
 
-button,
 input[type=submit] {
-    border-radius: 10px;
+    border-radius: 38px;
     background-color: gainsboro;
-    width: 100px;
+    min-width: 200px;
+    padding: 10px;
+    border: 1px solid #bbb;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+
+/*  FORMSS  */
+
+textarea {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: block;
+    padding: 10px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    border: none;
+    resize: none;
+}
+
+input[type=submit] {
+    border-radius: 38px;
+    background-color: gainsboro;
+    min-width: 200px;
+    padding: 10px;
+    border: 1px solid #bbb;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+}
+
+#form {
+    background-color: #f3f3f3;
+    padding: 20px;
+}
+
+#form .flex {
+    margin-bottom: 20px;
+}
+
+#form label {
+    width: 150px;
+}
+
+.recipient {
+    display: block;
+    padding: 10px;
+    /* border-radius: 100px; */
+    min-width: 200px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+    border: none;
+}
+
+
+/*  CHATSSS  */
+
+.flex {
+    display: flex;
+}
+
+.chats {
+    flex: 0;
+    /* padding-right: 20px;
+    border-right: 1px solid gainsboro; */
+}
+
+.chats .button {
+    user-select: none;
+    text-transform: capitalize;
+    cursor: pointer;
+    text-align: center;
+    padding: 10px;
+    min-width: 200px;
+    background-color: #fff;
+    border-bottom: 1px solid gainsboro;
+}
+
+.chats .button:first-child {
+    border-top: 1px solid gainsboro;
+}
+
+.chats .button:hover {
+    background-color: #eee;
+}
+
+.chats .button:active {
+    /* background-color: #00ffba; */
+}
+
+.chats .button.selected {
+    background-color: #e0e0e0;
+}
+
+.messages {
+    flex: 1;
+}
+
+.message {
+    position: relative;
+    border-bottom: 1px solid gainsboro;
+    border-left: 1px solid gainsboro;
+    padding: 10px;
+}
+
+.message:first-child {
+    border-top: 1px solid gainsboro;
+}
+
+.message .author {
+    font-weight: bold;
+    text-transform: capitalize;
+    margin-bottom: 3px;
+}
+
+.message .content {
+    color: #333;
+}
+
+.message .date {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 80%;
+    color: #999;
 }
