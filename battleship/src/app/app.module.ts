@@ -20,9 +20,6 @@ import { ChatComponent } from './components/chat/chat.component';
 import { GameComponent } from './components/game/game.component';
 import { SearchComponent } from './components/search/search.component';
 
-
-
-
 const appRoutes: Routes = [
   { path: 'login', component: UserLoginComponent },
   { path: 'leaderboard', component: LeaderboardComponent, canActivate: [AuthGuard]},
@@ -31,7 +28,6 @@ const appRoutes: Routes = [
   { path: 'chat', component: ChatComponent, canActivate: [AuthGuard]},
   { path: 'game', component: GameComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard]},
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
-  //{ path: '', component: AppComponent },
 ];
 
 @NgModule({

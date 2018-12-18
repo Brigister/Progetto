@@ -2,8 +2,8 @@ export interface IUser {
     id: string,
     username: string,
     email: string,
-    win: number,
-    losses: number,
+    victories: number,
+    defeats: number,
     isAdmin: boolean,
     password: string
   

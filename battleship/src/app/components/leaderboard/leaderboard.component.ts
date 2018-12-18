@@ -17,7 +17,7 @@ export class LeaderboardComponent {
   
   ngOnInit(): void {
     
-    this.http.getUsers().subscribe((data: any) => {
+    this.http.getLeaderboard().subscribe((data: any) => {
       console.log(data);
       this.users = data.user;    
       console.table(this.users);

@@ -19,25 +19,10 @@ export class AuthService {
     return this.http.post<any>(this._registerUrl, user) 
   } 
  
-  postMessage(message){ 
-    return this.http.post<any>(this._messageUrl, message) 
-  } 
- 
-  isValid(username : string, callback: Function): any{ 
+  validRecipient(username : string, callback: Function): any{ 
     this.http.get<any>(this._userUrl + username + "/check").subscribe((data: any) => { 
       callback(data); 
     }) 
-     
-  } 
- 
-  userWin(username: string): void{ 
-    this.http.patch(this._userUrl + username + "/win", null).subscribe((data) => 
-    console.log('SUCC')); 
-  } 
- 
-  userLoss(username: string): void{ 
-    this.http.patch(this._userUrl + username + "/loss", null).subscribe((data) => 
-    console.log('SUCC')); 
   } 
    
   loginUser(user) { 

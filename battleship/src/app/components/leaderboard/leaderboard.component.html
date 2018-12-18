@@ -19,9 +19,9 @@
 <div id="23classificato " *ngFor="let user of users | slice:0:3; index as i ">
     <h1 class="statistiche">{{(i+1 == 1) ? "🥇": ((i+1 == 2) ?"🥈" : "🥉")}}</h1>
     <h2 class="statistiche">{{user.username}}</h2>
-    <p class="statistiche">{{user.win}} </p>
-    <p class="statistiche">{{user.losses}} </p>
-    <p class="statistiche">{{user.win+user.losses}}</p>
+    <p class="statistiche">{{user.victories}} </p>
+    <p class="statistiche">{{user.defeats}} </p>
+    <p class="statistiche">{{user.victories+user.defeats}}</p>
     <hr>
 </div>
 
@@ -35,9 +35,9 @@
 <div *ngFor="let user of users | slice:3:10; index as i">
     <h1 class="statistiche ">{{i+4}}°</h1>
     <h2 class="statistiche ">{{user.username}}</h2>
-    <p class="statistiche ">{{user.win}} </p>
-    <p class="statistiche ">{{user.losses}} </p>
-    <p class="statistiche ">{{user.win+user.losses}}</p>
+    <p class="statistiche ">{{user.victories}} </p>
+    <p class="statistiche ">{{user.defeats}} </p>
+    <p class="statistiche ">{{user.victories+user.defeats}}</p>
     <hr>
 
 </div>

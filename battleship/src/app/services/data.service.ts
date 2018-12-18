@@ -10,9 +10,15 @@ export class DataService {
   constructor(public http:HttpClient) {  
   } 
   
+  //Administration Component
   public getUsers(){ 
     return this.http.get(this._userUrl); 
-          }; 
+  }; 
+
+  //Leaderboard Component
+  public getLeaderboard(){ 
+    return this.http.get(this._userUrl + 'leaderboard'); 
+  }; 
  
   //Search Component
   public getStatistics(username : string) { 
@@ -20,10 +26,21 @@ export class DataService {
   }; 
   
   //credo non serva
-  public getAdmin(){ 
+  /* public getAdmin(){ 
     return this.http.get(this._userUrl) 
   }        
+  */
+  //Game Component
+  patchVictory(username: string): void{ 
+    this.http.patch(this._userUrl + username + "/victory", null).subscribe((data) => 
+    console.log('SUCC')); 
+  } 
  
+  patchDefeat(username: string): void{ 
+    this.http.patch(this._userUrl + username + "/defeat", null).subscribe((data) => 
+    console.log('SUCC')); 
+  } 
+
   //Administration Component
   public upgradeUser(username : string){ 
     return this.http.patch(this._userUrl + username + '/upgrade', null).subscribe()
@@ -45,6 +62,17 @@ export class DataService {
   public getChatsMessages(user1 : string, user2 : string) {
     return this.http.get(this._messagesUrl + user1 + '/' + user2 + '/payload');
   }
+
+  validRecipient(username : string, callback: Function): any{ 
+    this.http.get<any>(this._userUrl + username + "/check").subscribe((data: any) => { 
+      callback(data); 
+    }) 
+  } 
+  
+  sendMessage(message){ 
+    return this.http.post<any>(this._messagesUrl, message) 
+  } 
+ 
 
   public deleteMessage(id : string){ 
     this.http.delete(this._messagesUrl + id).subscribe() 

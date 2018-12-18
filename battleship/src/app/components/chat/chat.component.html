@@ -10,7 +10,7 @@
         <div class="flex">
             <label class="lbl-message">Messaggio</label>
 
-            <textarea type="text" rows="5" cols="80" [(ngModel)]="messageData.content" name="content" required></textarea>
+            <textarea type="text" rows="5" cols="80" [(ngModel)]="messageData.payload" name="payload" required></textarea>
         </div>
 
         <div class="flex">
@@ -35,9 +35,9 @@
 
     <div class="messages">
         <div class="message" *ngFor="let message of messages">
-            <div class="author">{{message.author}}</div>
+            <div class="author">{{message.sender}}</div>
             <div class="date">{{message.date}}</div>
-            <div class="content">{{message.content}}</div>
+            <div class="content">{{message.payload}}</div>
         </div>
     </div>
 </div>

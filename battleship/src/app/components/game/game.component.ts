@@ -131,7 +131,7 @@ export class GameComponent {
     self.gamedata.socket.on('on loss', function(data){
       console.log(data + ' ha vinto la partita');
       self.end = true;
-      self.authService.userLoss(self.username);
+      self.dataService.patchDefeat(self.username);
     })
     
     //dà la vittoria in caso di abbandono del game
@@ -139,7 +139,7 @@ export class GameComponent {
       console.log('Il tuo avversario ha abbandonato la partita');
       self.end = true;
       self.score = 1000;
-      self.authService.userWin(self.username);
+      self.dataService.patchVictory(self.username);
     })
 
     
@@ -259,7 +259,7 @@ export class GameComponent {
         return;
       }
 
-      if(this.boardService.positionCheck(+ row, + col, this.ship_try[0], tile)){
+      if(this.positionCheck(+ row, + col, this.ship_try[0], tile)){
           for (let i= 0; i < this.ship_try[0]; i++) {
           
           if (this.ver == true){
@@ -313,7 +313,7 @@ export class GameComponent {
 
               //Vittoria
               self.gamedata.socket.emit('on victory', this.username);
-              self.authService.userWin(this.username);
+              self.dataService.patchVictory(this.username);
               this.end = true;
               
             }
@@ -413,7 +413,7 @@ export class GameComponent {
         this.gamedata.socket.emit('on leaving');
         //this.gamedata.socket.to('' + this.gamedata.gameId).broadcast.emit('on leaving');
         //non posso fare il to('' + gameId perchè mi dice che non è una funzione???????????)
-        this.authService.userLoss(this.username);
+        this.dataService.patchVictory(this.username);
         return true
       }
     } 

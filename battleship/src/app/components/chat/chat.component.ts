@@ -11,7 +11,7 @@ import { IMessage} from '../../interfaces/imessage'
 })
 export class ChatComponent implements OnInit {
 
-  constructor(public http: DataService, public auth: AuthService) { }
+  constructor(public data: DataService, public auth: AuthService) { }
 
   messages: IMessage[];
   chats : string[];
@@ -25,21 +25,22 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     console.log(this.username);
 
-    this.http.getChats(this.username).subscribe((data: any) => {
+    this.data.getChats(this.username).subscribe((data: any) => {
       this.chats = data.message;
       console.log(this.chats);
     })
   }
 
   postMessage() {
-    this.auth.isValid(this.messageData.recipient, (isValid: boolean) => {
+    this.data.validRecipient(this.messageData.recipient, (isValid: boolean) => {
       if (isValid) {
         this.messageData.date = this.now;
-        this.messageData.author = this.username;
-        this.auth.postMessage(this.messageData)
+        this.messageData.sender = this.username;
+        this.data.sendMessage(this.messageData)
           .subscribe(
             res => {
               console.log(this.messageData)
+              this.messageData.payload = ""
             },
             err =>{console.log(err)
             document.getElementById("error").innerText = "Messaggio vuoto, prego inserire un messaggio";
@@ -58,7 +59,7 @@ export class ChatComponent implements OnInit {
 
   showMessages(username : string){
     this.active = username;
-    this.http.getChatsMessages(this.username , username).subscribe((data : any) => {
+    this.data.getChatsMessages(this.username , username).subscribe((data : any) => {
       this.messages = data.message
       console.log(this.messages);
     }) 
