@@ -48,14 +48,12 @@ export class GameComponent {
   verPos : Function;
   positionCheck: Function;
   shipPositioning: Function;
-  playerOneClick: Function;
-  playerArrivoClick: Function;
-  
+  onPlayerClick: Function;
+  submitPlayerClick: Function;
 
   username: string = this.authService.getUsername();
   id: string = this.authService.getId();
   
-
   constructor(
     private boardService: BoardService,
     private authService: AuthService,
@@ -158,6 +156,7 @@ export class GameComponent {
     }
 
     //controllo posizionamento adeguato delle barche
+ 
     self.positionCheck = function(row : number, col : number, ship : number) {
       var _row : number = row;
       var _col : number = col;
@@ -166,87 +165,87 @@ export class GameComponent {
       if(this.ver){
         //posizionamenti verticali all'interno del reticolo ed adiacenza ai lati
         for (var i = 0; i<ship; i++) {
-          if (_row > (board_size-1)) {
-           good = false;
-          }
-          console.log(_row + col);
-          if(col == 0 && good == true){
-            if (this.boards[0].tiles[_row][col+1].value == 1 || this.boards[0].tiles[_row][col].value == 1){
-              good = false;
-            }
-          }else{
+        if (_row > (board_size-1)) {
+          good = false;
+        }
+        console.log(_row + col);
+        if(col == 0 && good == true){
+          if (this.boards[0].tiles[_row][col+1].value == 1 || this.boards[0].tiles[_row][col].value == 1){
+            good = false;
+        }
+        }else {
             if(col == (board_size-1) && good == true){
-              if (this.boards[0].tiles[_row][col-1].value == 1 || this.boards[0].tiles[_row][col].value == 1){
+             if (this.boards[0].tiles[_row][col-1].value == 1 || this.boards[0].tiles[_row][col].value == 1){
                 good = false;
-              }
-            }else{
-              if (good == true){
+             }
+           }else{
+             if (good == true){
               if (this.boards[0].tiles[_row][col-1].value == 1 || this.boards[0].tiles[_row][col+1].value == 1 || this.boards[0].tiles[_row][col].value == 1){
-                good = false;
-              }
-              }
-            }
-          }
-          _row++;
-          }
-          
-      
-        if(row > 0 && good == true){
-          //controllo posizionamento verticale : barche sopra e sotto
-          if (this.boards[0].tiles[row-1][col].value == 1){
             good = false;
-          }   
+          }
+          }
         }
-
-        if (good == true && (row+ship) < board_size && this.boards[0].tiles[row+ship][col].value == 1){
-          good = false;
-        }  
-
       }
-      else{
-        //controllo posizionamento orizzontale : rimanere all'interno del reticolo
-        for (var i = 0; i<ship; i++) {
-          if (_col > (board_size-1)) {
-           good = false;
-          }
-          console.log(_row + col);
-          if(good == true && row == 0 ){
-            if (this.boards[0].tiles[row+1][_col].value == 1 || this.boards[0].tiles[row][_col].value == 1){
-              good = false;
-            }
-          }else{
-            if(good == true && row == (board_size-1)){
-              if (this.boards[0].tiles[row-1][_col].value == 1 || this.boards[0].tiles[row][_col].value == 1){
-                good = false;
-              }
-            }else{
-              if (good == true){
-              if (this.boards[0].tiles[row-1][_col].value == 1 || this.boards[0].tiles[row+1][_col].value == 1 || this.boards[0].tiles[row][_col].value == 1){
-                good = false;
-              }
-              }
-            }
-          }
-          _col++;
-          }
-          
+      _row++;
+      }
       
-        if(good == true && col > 0){
-          //controllo posizionamento verticale : barche sopra e sotto
-          if (this.boards[0].tiles[row][col-1].value == 1){
-            good = false;
-          }   
-        }
-
-        if (good == true && (col+ship) < board_size && this.boards[0].tiles[row][col+ship].value == 1){
-          good = false;
-        }  
-        
-      }
-
-      console.log(this.boards[0]);
-      return good;
+  
+    if(row > 0 && good == true){
+      //controllo posizionamento verticale : barche sopra e sotto
+      if (this.boards[0].tiles[row-1][col].value == 1){
+        good = false;
+      }   
     }
+
+    if (good == true && (row+ship) < board_size && this.boards[0].tiles[row+ship][col].value == 1){
+      good = false;
+    }  
+
+  }
+  else{
+    //controllo posizionamento orizzontale : rimanere all'interno del reticolo
+    for (var i = 0; i<ship; i++) {
+      if (_col > (board_size-1)) {
+       good = false;
+      }
+      console.log(_row + col);
+      if(good == true && row == 0 ){
+        if (this.boards[0].tiles[row+1][_col].value == 1 || this.boards[0].tiles[row][_col].value == 1){
+          good = false;
+        }
+      }else{
+        if(good == true && row == (board_size-1)){
+          if (this.boards[0].tiles[row-1][_col].value == 1 || this.boards[0].tiles[row][_col].value == 1){
+            good = false;
+          }
+        }else{
+          if (good == true){
+          if (this.boards[0].tiles[row-1][_col].value == 1 || this.boards[0].tiles[row+1][_col].value == 1 || this.boards[0].tiles[row][_col].value == 1){
+            good = false;
+          }
+          }
+        }
+      }
+      _col++;
+      }
+      
+  
+    if(good == true && col > 0){
+      //controllo posizionamento verticale : barche sopra e sotto
+      if (this.boards[0].tiles[row][col-1].value == 1){
+        good = false;
+      }   
+    }
+
+    if (good == true && (col+ship) < board_size && this.boards[0].tiles[row][col+ship].value == 1){
+      good = false;
+    }  
+    
+  }
+
+  console.log(this.boards[0]);
+  return good;
+} 
    
     self.shipPositioning = function(click: any) {
       
@@ -260,7 +259,7 @@ export class GameComponent {
         return;
       }
 
-      if(this.positionCheck(+ row, + col, this.ship_try[0], tile)){
+      if(this.boardService.positionCheck(+ row, + col, this.ship_try[0], tile)){
           for (let i= 0; i < this.ship_try[0]; i++) {
           
           if (this.ver == true){
@@ -282,7 +281,7 @@ export class GameComponent {
     //value = 0 non c'è la barca
     //value = 1 c'è una barca
     //value = 2 casella cliccata
-    self.playerOneClick = function(click:any) {
+    self.onPlayerClick = function(click:any) {
       
       let id = click.target.id,
       row = id.substring(2,3), col = id.substring(3,4),
@@ -337,11 +336,11 @@ export class GameComponent {
 
     //visualizza il colpo sulla board dell'avversario
     self.gamedata.socket.on('fire in the hole', function(data) {
-      self.playerArrivoClick(data);
+      self.submitPlayerClick(data);
       console.log(data);
     })
     
-    self.playerArrivoClick = function(click:any) {
+    self.submitPlayerClick = function(click:any) {
       
       let id = click,
       row = id.substring(2,3), col = id.substring(3,4),

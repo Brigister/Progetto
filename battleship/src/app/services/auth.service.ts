@@ -77,9 +77,4 @@ export class AuthService {
     const token = <any>JWT(this.getToken()); 
     return token.isAdmin;
   }
-
-  getConversationId() {
-    const token = <any>JWT(this.getToken()); 
-    return token.conversationId;
-  }
 }

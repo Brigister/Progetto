@@ -6,26 +6,26 @@ import { IMessage} from '../../interfaces/imessage'
 
 @Component({
   selector: 'app-messages',
-  templateUrl: './messages.component.html',
-  styleUrls: ['./messages.component.css']
+  templateUrl: './chat.component.html',
+  styleUrls: ['./chat.component.css']
 })
-export class MessagesComponent implements OnInit {
+export class ChatComponent implements OnInit {
 
   constructor(public http: DataService, public auth: AuthService) { }
 
   messages: IMessage[];
   chats : string[];
-  utente: string = this.auth.getUsername();
+  username: string = this.auth.getUsername();
   active : string;
   messageData = <any>{};
   todayDate = new Date();
-  dateToday = (this.todayDate.getHours() + ':' + this.todayDate.getMinutes() + ' ' 
+  now = (this.todayDate.getHours() + ':' + this.todayDate.getMinutes() + ' ' 
               + this.todayDate.getDate() + '-' + ((this.todayDate.getMonth() + 1)) + '-' + this.todayDate.getFullYear());
   
   ngOnInit() {
-    console.log(this.utente);
+    console.log(this.username);
 
-    this.http.getChats(this.utente).subscribe((data: any) => {
+    this.http.getChats(this.username).subscribe((data: any) => {
       this.chats = data.message;
       console.log(this.chats);
     })
@@ -34,8 +34,8 @@ export class MessagesComponent implements OnInit {
   postMessage() {
     this.auth.isValid(this.messageData.recipient, (isValid: boolean) => {
       if (isValid) {
-        this.messageData.date = this.dateToday;
-        this.messageData.author = this.auth.getUsername();
+        this.messageData.date = this.now;
+        this.messageData.author = this.username;
         this.auth.postMessage(this.messageData)
           .subscribe(
             res => {
@@ -58,10 +58,9 @@ export class MessagesComponent implements OnInit {
 
   showMessages(username : string){
     this.active = username;
-    this.http.getChatsMessages(this.utente , username).subscribe((data : any) => {
+    this.http.getChatsMessages(this.username , username).subscribe((data : any) => {
       this.messages = data.message
       console.log(this.messages);
     }) 
   }
-
 }

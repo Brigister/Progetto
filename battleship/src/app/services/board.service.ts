@@ -7,14 +7,12 @@ import { AuthService } from './auth.service'
 @Injectable()
 export class BoardService {
 
-  playerId: number = 1;
   boards: Board[] = [];
-
+  
   constructor(private authService: AuthService) { }
 
   createBoard(size: number = 10): Board[] {
     let tiles = [];
-    // create tiles for board
     for (let i = 0; i < size; i++) {
       tiles[i] = [];
       for (let j = 0; j < size; j++) {
@@ -31,6 +29,7 @@ export class BoardService {
     return tiles;
   }
 
+  //credo non serva
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }

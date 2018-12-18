@@ -9,23 +9,22 @@ export class DataService {
 
   constructor(public http:HttpClient) {  
   } 
- 
-  public deleteMessage(id : string){ 
-    this.http.delete(this._messagesUrl + id).subscribe() 
-  } 
- 
+  
   public getUsers(){ 
     return this.http.get(this._userUrl); 
           }; 
  
+  //Search Component
   public getStatistics(username : string) { 
     return this.http.get(this._userUrl + username + "/statistics") 
   }; 
-   
+  
+  //credo non serva
   public getAdmin(){ 
     return this.http.get(this._userUrl) 
   }        
  
+  //Administration Component
   public upgradeUser(username : string){ 
     return this.http.patch(this._userUrl + username + '/upgrade', null).subscribe()
   } 
@@ -37,11 +36,8 @@ export class DataService {
   public userDelete(id: string): void{ 
     this.http.delete(this._userUrl + id).subscribe()
   } 
- 
-  public getMessages(username : string){ 
-    return this.http.get(this._messagesUrl + username); 
-  } 
- 
+  
+  //Chat Component
   public getChats(username : string) {
     return this.http.get(this._messagesUrl + username + '/conversations');
   }  
@@ -49,6 +45,10 @@ export class DataService {
   public getChatsMessages(user1 : string, user2 : string) {
     return this.http.get(this._messagesUrl + user1 + '/' + user2 + '/payload');
   }
+
+  public deleteMessage(id : string){ 
+    this.http.delete(this._messagesUrl + id).subscribe() 
+  } 
 }  
  
   

@@ -69,7 +69,7 @@
             <div *ngFor="let board of boards | slice:1:2; let i = index">
                 <table>
                     <tr *ngFor="let row of board.tiles; let j = index">
-                        <td *ngFor="let col of row; let k = index" (click)="playerOneClick($event)" [style.background-color]="col.used ? '' : 'transparent'" [class.win]="col.status == 'win'" [class.fail]="col.status !== 'win'" class="battleship-tile" id="t{{i}}{{j}}{{k}}">
+                        <td *ngFor="let col of row; let k = index" (click)="onPlayerClick($event)" [style.background-color]="col.used ? '' : 'transparent'" [class.win]="col.status == 'win'" [class.fail]="col.status !== 'win'" class="battleship-tile" id="t{{i}}{{j}}{{k}}">
                             {{ col.value == "1" ? (col.status == "hit" ? "💀" : " ") : (col.status == "miss" ? "⛶" : (col.status == "hit" ? "💀" : " ")) }}
                         </td>
                     </tr>
@@ -79,12 +79,10 @@
     </div>
 
     <!-- Vittoria/Sconfitta -->
-    <div>
-        <br><br><br><br><br><br><br><br><br><br>
-
-        <h1 style="text-align:center" *ngIf="end && score == 1 ">Hai Vinto! Complimenti! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
-        <h1 style="text-align:center" *ngIf="end && score < 1">Mi spiace, hai perso! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
-        <h1 style="text-align:center" *ngIf="end && score == 1000 ">Hai Vinto! Il tuo Avverario si è ritirato! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
+    <div class="end-game">
+        <h1 *ngIf="end && score == 1 ">Hai Vinto! Complimenti! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
+        <h1 *ngIf="end && score < 1">Mi spiace, hai perso! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
+        <h1 *ngIf="end && score == 1000 ">Hai Vinto! Il tuo Avverario si è ritirato! <br> Per concludere il gioco lascia questa pagina, grazie.</h1>
     </div>
 
 </div>

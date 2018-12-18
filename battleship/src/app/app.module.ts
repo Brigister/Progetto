@@ -16,7 +16,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { CanDeactivateGuard} from './guards/can-deactivate.guard'
 import { TokenInterceptorService} from './services/token-interceptor.service';
 import { AdministrationComponent } from './components/administration/administration.component';
-import { MessagesComponent } from './components/messages/messages.component';
+import { ChatComponent } from './components/chat/chat.component';
 import { GameComponent } from './components/game/game.component';
 import { SearchComponent } from './components/search/search.component';
 
@@ -28,7 +28,7 @@ const appRoutes: Routes = [
   { path: 'leaderboard', component: LeaderboardComponent, canActivate: [AuthGuard]},
   { path: 'signup', component: UserSignupComponent },
   { path: 'administration', component: AdministrationComponent, canActivate: [AuthGuard]},
-  { path: 'message', component: MessagesComponent, canActivate: [AuthGuard]},
+  { path: 'chat', component: ChatComponent, canActivate: [AuthGuard]},
   { path: 'game', component: GameComponent, canActivate: [AuthGuard], canDeactivate: [CanDeactivateGuard]},
   { path: 'search', component: SearchComponent, canActivate: [AuthGuard]},
   //{ path: '', component: AppComponent },
@@ -41,7 +41,7 @@ const appRoutes: Routes = [
     UserLoginComponent,
     UserSignupComponent,
     AdministrationComponent,
-    MessagesComponent,
+    ChatComponent,
     GameComponent,
     SearchComponent,
     

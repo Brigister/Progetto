@@ -15,6 +15,7 @@ button {
     width: 100px;
     border-radius: 10px;
     background-color: gainsboro;
+    margin-left: 15px;
 }
 
 #registrazione {

@@ -9,7 +9,7 @@ import { Router } from '@angular/router'
 })
 export class UserSignupComponent implements OnInit {
 
-  registerUserData = {}
+  signupData = {}
   constructor(private _auth: AuthService,
               private _router: Router) { }
 
@@ -17,7 +17,7 @@ export class UserSignupComponent implements OnInit {
   }
 
   registerUser() {
-    this._auth.registerUser(this.registerUserData)
+    this._auth.registerUser(this.signupData)
     .subscribe(
       res => {
         //localStorage.setItem('token', res.token)
