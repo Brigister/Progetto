@@ -20,7 +20,6 @@ export class UserSignupComponent implements OnInit {
     this._auth.registerUser(this.signupData)
     .subscribe(
       res => {
-        //localStorage.setItem('token', res.token)
         this._router.navigate(['/login'])
       },
       err => { console.log(err)

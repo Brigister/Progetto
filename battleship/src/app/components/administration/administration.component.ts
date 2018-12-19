@@ -10,26 +10,26 @@ import { DataService } from '../../services/data.service';
 })
 export class AdministrationComponent implements OnInit {
 
-  constructor( public http:DataService) { }
+  constructor( public data:DataService) { }
     users: IUser[];
 
   delete(id: string){
-    this.http.userDelete(id);
+    this.data.userDelete(id);
     location.reload();
   }
 
   upgrade(username : string) {
-    this.http.upgradeUser(username);
+    this.data.upgradeUser(username);
     location.reload();
   }
 
   downgrade(username : string) {
-    this.http.downgradeUser(username);
+    this.data.downgradeUser(username);
     location.reload();
   }
 
   ngOnInit() {
-    this.http.getUsers().subscribe((data: any) => {
+    this.data.getUsers().subscribe((data: any) => {
       console.log(data);
       this.users = data.user;
   })

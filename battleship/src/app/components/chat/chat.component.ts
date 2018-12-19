@@ -62,6 +62,6 @@ export class ChatComponent implements OnInit {
     this.data.getChatsMessages(this.username , username).subscribe((data : any) => {
       this.messages = data.message
       console.log(this.messages);
-    }) 
+    });
   }
 }
