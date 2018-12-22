@@ -1,0 +1,13 @@
+h1 {
+    text-align: center;
+}
+
+.statistiche {
+    display: inline-block;
+    text-align: center;
+    width: 20%
+}
+
+#podio {
+    margin-bottom: 100px;
+}

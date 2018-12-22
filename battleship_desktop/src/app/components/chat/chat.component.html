@@ -1,0 +1,43 @@
+<div id="form">
+    <form>
+
+        <div class="flex">
+            <label class="lbl-recipient">Destinatario</label>
+
+            <input type="text" class="recipient" placeholder="Inserisci Destinatario" [(ngModel)]="messageData.recipient" name="recipient" required>
+        </div>
+
+        <div class="flex">
+            <label class="lbl-message">Messaggio</label>
+
+            <textarea type="text" rows="5" cols="80" [(ngModel)]="messageData.payload" name="payload" required></textarea>
+        </div>
+
+        <div class="flex">
+            <label> </label>
+
+            <input type="submit" (click)="postMessage()">
+        </div>
+
+        <h2 id="error" style="color:red"></h2>
+    </form>
+</div>
+
+<h2>Ecco le tue Chat</h2>
+
+<div class="flex ">
+    <div class="chats">
+        <div class="button" [ngClass]="{'selected': chat == active}" (click)="showMessages(chat)" *ngFor="let chat of chats">
+            <div *ngIf=""></div>
+            {{chat}}
+        </div>
+    </div>
+
+    <div class="messages">
+        <div class="message" *ngFor="let message of messages">
+            <div class="author">{{message.sender}}</div>
+            <div class="date">{{message.date}}</div>
+            <div class="content">{{message.payload}}</div>
+        </div>
+    </div>
+</div>

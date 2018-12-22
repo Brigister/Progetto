@@ -1,0 +1,18 @@
+<div style="text-align:center">
+    <h1>Benvenuto nel gioco di Battaglia Navale!</h1>
+</div>
+
+<div style="text-align:center">
+    <button *ngIf="!_authService.loggedIn()" routerLink="/login" routerLinkActive="active">Login</button>
+    <button *ngIf="!_authService.loggedIn()" routerLink="/signup" routerLinkActive="active">Registrati</button>
+    <button *ngIf="_authService.loggedIn()" routerLink="/game" routerLinkActive="active">Gioca!</button>
+    <button *ngIf="_authService.loggedIn()" routerLink="/leaderboard" routerLinkActive="active">Classifiche</button>
+    <button *ngIf="_authService.loggedIn()" routerLink="/search" routerLinkActive="active">Ricerca Utente</button>
+    <button *ngIf="_authService.loggedIn()" routerLink="/chat" routerLinkActive="active">Chat</button>
+    <button *ngIf="_authService.loggedIn() && _authService.isAdmin()" routerLink="/administration" routerLinkActive="active">Gestione Profili</button>
+    <button *ngIf="_authService.loggedIn()" routerLink="/" routerLinkActive="active" (click)="_authService.logoutUser()">Logout</button>
+</div>
+
+<hr>
+
+<router-outlet></router-outlet>
