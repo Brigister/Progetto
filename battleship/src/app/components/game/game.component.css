@@ -29,6 +29,10 @@ button {
     background-color: aqua !important;
 }
 
+.sunk {
+    background-color: black !important;
+}
+
 .posizionamento {
     text-align: center;
     margin-bottom: 20px;

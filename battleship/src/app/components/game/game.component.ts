@@ -24,8 +24,8 @@ export class GameComponent {
   score: number = 0;
 
   // Array delle barche
-  ship_array: any [] = [2, 2, 2, 2, 3, 3, 4, 4, 5];
-  //ship_array: any [] = [2, 3, 4];
+  //ship_array: any [] = [2, 2, 2, 2, 3, 3, 4, 4, 5];
+  ship_array: any [] = [2, 3, 4];
   ship_duplicate = this.ship_array.slice(0);
 
   gamedata: any = {
@@ -44,6 +44,7 @@ export class GameComponent {
   shipPositioning: Function;
   onPlayerClick: Function;
   submitPlayerClick: Function;
+  onSunkCheck : Function;
 
   username: string = this.authService.getUsername();
   id: string = this.authService.getId();
@@ -132,7 +133,6 @@ export class GameComponent {
       self.dataService.patchVictory(self.username);
     })
 
-    
     // Cambio posizionamento navi
     self.verPos = function(click: any){
       if (this.ver == false) {
@@ -247,7 +247,7 @@ export class GameComponent {
         return;
       }
 
-      if(this.positionCheck(+ row, + col, this.ship_array[0], tile)){
+      if(this.positionCheck(+ row, + col, this.ship_array[0])){
           for (let i= 0; i < this.ship_array[0]; i++) {
           
           if (this.ver == true){
@@ -267,9 +267,95 @@ export class GameComponent {
   }
 
 
+  /*
+   Controllo sopra sotto dx sx per capire la direzione
+   capita la direzione 
 
+   va messo che se esce dalla board smette di controllare
+  */
+    self.onSunkCheck = function(row : number, col : number) {
+      var _col = col;
+      var _row = row;
+      var sunked: boolean;
+      var j : number;
+     /*  let id = click.target.id,
+      row = id.substring(2,3), col = id.substring(3,4),
+      tile = this.boards[1].tiles[row][col]; */
 
-  
+      //sotto
+      if ( _row+1 < this.boards_size && this.boards[1].tiles[row+1][col].value == 1 )  {
+        for (let i = 0; i < 4; i++) {
+          if (row+i < this.board_size) {
+            if ( this.boards[1].tiles[row+i][col].value == 1 && this.boards[1].tiles[row+i][col].status != 'hit') {
+              this.j = j++;
+            }
+          }
+        }
+          if (this.j == 0) {
+            for (let i = 0; i < 4; i++) {
+              if (this.boards[1].tiles[row+i][col].value == 1) {
+                this.boards[1].tiles[row+i][col].value = 3
+              } 
+            }
+          } else return        
+      }
+      //sopra
+      if ( _row-1 > 0 && this.boards[1].tiles[row-1][col].value == 1 )  {
+        for (let i = 0; i < 4; i++) {
+          if ( _row-i > 0) {
+            if ( this.boards[1].tiles[row-i][col].value == 1 && this.boards[1].tiles[row-i][col].status != 'hit') {
+             this.j= j++;
+            }
+          }
+        }
+          if (j == 0) {
+            for (let i = 0; i < 4; i++) {
+              if (this.boards[1].tiles[row-i][col].value == 1) {
+                this.boards[1].tiles[row-i][col].value = 3
+              } 
+            }
+          } else return 
+           
+        
+      }
+    
+       //destra
+       if ( _col+1 < this.boards_size && this.boards[1].tiles[row][col+1].value == 1 )  {
+        for (let i = 0; i < 4; i++) {
+          if ( _col+i < board_size ) {
+            if ( this.boards[1].tiles[row][col+i].value == 1 && this.boards[1].tiles[row][col+i].status != 'hit') {
+              this.j= j++;
+            }
+          }
+        }
+          if (this.j == 0) {
+            for (let i = 0; i < 4; i++) {
+              if (this.boards[1].tiles[row][col+i].value == 1) {
+                this.boards[1].tiles[row][col+i].value = 3
+              } 
+            }
+          } else return 
+           
+        
+      }
+      //sinistra
+      if ( _col-1 > 0 && this.boards[1].tiles[row][col-1].value == 1 )  {
+        for (let i = 0; i < 4; i++) {
+          if ( _col-i > 0 ) {
+           if ( this.boards[1].tiles[row][col-i].value == 1 && this.boards[1].tiles[row][col-i].status != 'hit') {
+             this.j= j++;
+            }
+          }
+        }
+          if (this.j == 0) {
+            for (let i = 0; i < 4; i++) {
+              if (this.boards[1].tiles[row][col-i].value == 1) {
+                this.boards[1].tiles[row][col-i].value = 3
+              } 
+            }
+          } else return    
+        }
+    }
     // Gestisce il click del Giocatore sulla board Avversaria
     self.onPlayerClick = function(click:any) {
       
@@ -289,7 +375,8 @@ export class GameComponent {
           // Nave Colpita
           if (tile.value == 1) {
             this.boards[1].tiles[row][col].status = 'hit';
-            this.boards[1].tiles[row][col].value = 2;
+            //this.boards[1].tiles[row][col].value = 2;
+            self.onSunkCheck(+ row,+ col);
             this.score++;
             // Controlla se il giocatore ha vinto
             if(this.score == 27){
@@ -310,6 +397,7 @@ export class GameComponent {
       } else {
           alert ("Stai cliccando su una casella che hai già cliccato, riprova") 
         }
+        
     }
 
     // Visualizza il colpo sulla board dell'avversario
@@ -354,7 +442,7 @@ export class GameComponent {
    }
 
   // Resetta la board in Fase di Posizionamento
-  deleteShips(){
+  resetBoard(){
     this.boards.shift();
     this.myBoard=this.boardService.createBoard()
     var fleet = this.ship_duplicate.slice(0);
@@ -369,6 +457,13 @@ export class GameComponent {
     if (tile.value == 2 ) {
       clickable = false
     }
+
+    // Può non servire --- implementazione sunk
+
+    if (tile.value == 3 ) {
+      clickable = false
+    }
+
     return clickable;
   }
 

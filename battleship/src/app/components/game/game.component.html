@@ -18,7 +18,7 @@
         <p *ngIf="ship_array.length == 0">Hai terminato le tue barche da posizionare, <strong>completa la fase di posizionamento</strong> per proseguire</p>
 
         <button *ngIf="players != false && !gamedata.sent" id="cambio" (click)="verPos($event)">Stai posizionando in: Orizzontale</button>
-        <button *ngIf="ship_array.length < 9" (click)="deleteShips()">Rimuovi barche</button>
+        <button *ngIf="ship_array.length < 9" (click)="resetBoard()">Rimuovi barche</button>
         <button *ngIf="ship_array.length == 0" (click)="submitBoard()">Completa la fase di posizionamento</button>
     </div>
 
@@ -59,7 +59,7 @@
             <div *ngFor="let board of boards | slice:1:2; let i = index">
                 <table>
                     <tr *ngFor="let row of board.tiles; let j = index">
-                        <td *ngFor="let col of row; let k = index" (click)="onPlayerClick($event)" [style.background-color]="col.used ? '' : 'transparent'" class="battleship-tile" id="t{{i}}{{j}}{{k}}">
+                        <td *ngFor="let col of row; let k = index" (click)="onPlayerClick($event)" class="battleship-tile" [class.sunk]="col.value == 3" id="t{{i}}{{j}}{{k}}">
                             {{ col.value == "1" ? (col.status == "hit" ? "💀" : " ") : (col.status == "miss" ? "⛶" : (col.status == "hit" ? "💀" : " ")) }}
                         </td>
                     </tr>
