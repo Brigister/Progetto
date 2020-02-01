@@ -37,17 +37,18 @@
 
         <!-- Turni -->
         <div class="posizionamento" *ngIf="gamedata.received && gamedata.sent">
-            <h3 *ngIf="gamedata.turno == gamedata.numeroGiocatore"> E' il tuo turno! Fai la tua mossa</h3>
-            <h3 *ngIf="gamedata.turno != gamedata.numeroGiocatore"> E' il turno dell'avversario</h3>
+            <h3 *ngIf="gamedata.turno == gamedata.player"> E' il tuo turno! Fai la tua mossa</h3>
+            <h3 *ngIf="gamedata.turno != gamedata.player"> E' il turno dell'avversario</h3>
         </div>
 
         <!-- Campo Giocatore -->
         <div *ngFor="let board of boards | slice:0:1; let i = index">
             <table>
                 <tr *ngFor="let row of board.tiles; let j = index">
-                    <td *ngFor="let col of row; let k = index" (click)="shipPositioning($event)" [style.background-color]="col.value == 1 ? 'green' : 'transparent'" [class.miss]="col.status == 'miss'" [class.hit]="col.status =='hit'" class="battleship-tile" id="t{{i}}{{j}}{{k}}">
-                        {{ col.value == "1" ? (col.status == "hit" ? "💀" : "🚢") : (col.status == "miss" ? "⛶" : (col.status == "hit" ? "💀" : "🌊")) }}
+                    <td *ngFor="let col of row; let k = index" (click)="shipPositioning($event)" [class.ship]="col.value == 1" [class.miss]="col.status == 'miss'" [class.hit]="col.status =='hit'" class="battleship-tile" id="t{{i}}{{j}}{{k}}">
+                        {{ col.value == "1" ? "🚢" : "🌊" }}
                     </td>
+
                 </tr>
             </table>
         </div>
@@ -59,8 +60,8 @@
             <div *ngFor="let board of boards | slice:1:2; let i = index">
                 <table>
                     <tr *ngFor="let row of board.tiles; let j = index">
-                        <td *ngFor="let col of row; let k = index" (click)="onPlayerClick($event)" class="battleship-tile" [class.sunk]="col.value == 3" id="t{{i}}{{j}}{{k}}">
-                            {{ col.value == "1" ? (col.status == "hit" ? "💀" : " ") : (col.status == "miss" ? "⛶" : (col.status == "hit" ? "💀" : " ")) }}
+                        <td *ngFor="let col of row; let k = index" (click)="onPlayerClick($event)" class="battleship-tile" [class.sunk]="col.value == 2" id="t{{i}}{{j}}{{k}}">
+                            {{ col.value == "1" ? (col.status == "hit" ? "☠️" : " ") : (col.status == "miss" ? "💧" : (col.status == "hit" ? "☠️" : " ")) }}
                         </td>
                     </tr>
                 </table>

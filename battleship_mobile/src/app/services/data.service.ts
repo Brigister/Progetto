@@ -4,8 +4,8 @@ import { HttpClient } from '@angular/common/http';
 @Injectable() 
 export class DataService { 
    
-  private _userUrl = 'http://localhost:3000/user/'; 
-  private _messagesUrl = 'http://localhost:3000/messages/'; 
+  private _userUrl = 'http://10.0.2.2:3000/user/'; 
+  private _messagesUrl = 'http://10.0.2.2:3000/messages/'; 
 
   constructor(public http:HttpClient) {  
   } 

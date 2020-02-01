@@ -21,12 +21,20 @@ button {
     cursor: crosshair;
 }
 
+.ship {
+    background-color: rgb(0, 255, 0)
+}
+
 .hit {
     background-color: red !important;
 }
 
 .miss {
     background-color: aqua !important;
+}
+
+.sunk {
+    background-color: black !important;
 }
 
 .posizionamento {

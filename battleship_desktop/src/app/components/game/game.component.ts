@@ -5,8 +5,10 @@ import { DataService } from '../../services/data.service';
 import io from 'socket.io-client';
 import { Player } from '../../player';
 import { Board } from '../../board'
+import { Router } from '@angular/router'
 
 const board_size: number = 10;
+const max_ship_lenght: number = 5;
 
 @Component({
   selector: 'app-game',
@@ -30,7 +32,7 @@ export class GameComponent {
 
   gamedata: any = {
     socket: null,
-    numeroGiocatore: "",
+    player: "",
     turno : "",
     sent: false,
     received: false,
@@ -44,6 +46,9 @@ export class GameComponent {
   shipPositioning: Function;
   onPlayerClick: Function;
   submitPlayerClick: Function;
+  onSunkCheck : Function;
+  //handleReload : Function;
+  
 
   username: string = this.authService.getUsername();
   id: string = this.authService.getId();
@@ -51,14 +56,24 @@ export class GameComponent {
   constructor(
     private boardService: BoardService,
     private authService: AuthService,
-    public dataService : DataService
+    public dataService : DataService,
+    private _router: Router
   ) {}
 
-  ngOnInit(): void {
+  
+  ngOnInit(): void {    
 
     var self = this;
 
-    self.gamedata.turno = '1';
+
+   /*  window.addEventListener('beforeunload', function(event){
+      event.returnValue = 'Stai per ricaricare la pagina, ciò porterà ad una sconfitta';
+      self.gamedata.socket.emit('on leaving');
+      self.dataService.patchDefeat(self.username);
+    }) */
+
+
+    self.gamedata.turno = "1";
 
     self.gamedata.socket = io.connect('http://localhost:3000');
 
@@ -70,8 +85,8 @@ export class GameComponent {
     self.gamedata.socket.on('create lobby', function (data) {
       self.gamedata.gameId = data;
       console.log("Lobby creata, gameId: " + self.gamedata.gameId);
-      self.gamedata.numeroGiocatore = "1";
-      console.log(self.gamedata.numeroGiocatore);
+      self.gamedata.player = "1";
+      console.log(self.gamedata.player);
       self.gamedata.alone = true;
 
       console.log(self.gamedata.alone);
@@ -81,9 +96,9 @@ export class GameComponent {
     self.gamedata.socket.on('entering lobby', function (data) {
       self.gamedata.gameId = data;
       console.log("Lobby trovata, connessione alla partita: " + self.gamedata.gameId);
-      if (self.gamedata.numeroGiocatore == "") {
-        self.gamedata.numeroGiocatore = "2";
-        console.log(self.gamedata.numeroGiocatore);
+      if (self.gamedata.player == "") {
+        self.gamedata.player = "2";
+        console.log(self.gamedata.player);
         self.gamedata.socket.emit('on start');
       }
     });
@@ -132,7 +147,6 @@ export class GameComponent {
       self.dataService.patchVictory(self.username);
     })
 
-    
     // Cambio posizionamento navi
     self.verPos = function(click: any){
       if (this.ver == false) {
@@ -157,7 +171,6 @@ export class GameComponent {
           if (_row > (board_size-1)) {
               rules = false;
           }
-          console.log(_row + col);
           if(col == 0 && rules == true){
             if (this.boards[0].tiles[_row][col+1].value == 1 || this.boards[0].tiles[_row][col].value == 1){
               rules = false;
@@ -216,7 +229,6 @@ export class GameComponent {
              }
         _col++;
         }
-      
   
         if(rules == true && col > 0){
           // Controllo posizionamento verticale : barche sopra e sotto
@@ -229,8 +241,6 @@ export class GameComponent {
           rules = false;
         }    
       }
-
-      console.log(this.boards[0]);
       return rules;
     } 
    
@@ -247,7 +257,7 @@ export class GameComponent {
         return;
       }
 
-      if(this.positionCheck(+ row, + col, this.ship_array[0], tile)){
+      if(this.positionCheck(+ row, + col, this.ship_array[0])){
           for (let i= 0; i < this.ship_array[0]; i++) {
           
           if (this.ver == true){
@@ -264,7 +274,119 @@ export class GameComponent {
       else {
         alert("Non ti è consentito mettere una barca qui");
       }
-  }
+    }
+
+    // Controlla se una nave è stata affondata e in caso setta il tile.value = 2
+    self.onSunkCheck = function(row : number, col : number) {
+      var i = 1;
+      var sunked: any[] = [this.boards[1].tiles[row][col]]
+
+      debugger;
+      //sotto
+      while ( row+i < board_size && this.boards[1].tiles[row+i][col].value == 1 ) {
+        if (this.boards[1].tiles[row+i][col].status == 'hit'){
+          sunked.push(this.boards[1].tiles[row+i][col]);
+          i++;
+        }
+        else return;
+      }
+      i = 1;
+
+      //sopra
+      while ( row-i >= 0 && this.boards[1].tiles[row-i][col].value == 1) {
+        if (this.boards[1].tiles[row-i][col].status == 'hit'){
+          sunked.push(this.boards[1].tiles[row-i][col]);
+          i++;
+        }
+        else return;
+      }
+      i = 1;
+      //destra 
+      while ( col+i < board_size && this.boards[1].tiles[row][col+i].value == 1 ) {
+        if (this.boards[1].tiles[row][col+i].status == 'hit'){
+          sunked.push(this.boards[1].tiles[row][col+i]);
+          i++;
+        }
+        else return;
+      }
+      i = 1;
+
+      //sinistra 
+      while ( col-i >= 0 && this.boards[1].tiles[row][col-i].value == 1 ) {
+        if (this.boards[1].tiles[row][col-i].status == 'hit'){
+          sunked.push(this.boards[1].tiles[row][col-i]);
+          i++;
+        }
+        else return;
+      }
+      i = 1;
+      
+      
+        //sotto
+/*       if ( _row+1 < board_size && this.boards[1].tiles[row+1][col].value == 1 )  {
+        for (let i = 1; i < max_ship_lenght; i++) {
+          if (row+i < board_size) {
+            if ( this.boards[1].tiles[row+i][col].value == 1 && this.boards[1].tiles[row+i][col].status == 'hit') {
+                sunked.push(this.boards[1].tiles[row+i][col])
+            } else {
+                    if ( this.boards[1].tiles[row+i][col].value == 1 && this.boards[1].tiles[row+i][col].status != 'hit') {
+                      return
+                    }
+            }
+          }
+        }
+      } 
+      
+      //sopra
+      if ( _row-1 >= 0 && this.boards[1].tiles[row-1][col].value == 1 )  {
+        for (let i = 1; i < max_ship_lenght; i++) {
+          if (row-i >= 0) {
+            if ( this.boards[1].tiles[row-i][col].value == 1 && this.boards[1].tiles[row-i][col].status == 'hit') {
+                sunked.push(this.boards[1].tiles[row-i][col])
+            } else {
+                    if ( this.boards[1].tiles[row-i][col].value == 1 && this.boards[1].tiles[row-i][col].status != 'hit') {
+                      return
+                    }
+            }
+          }
+        }
+      }
+
+      //sinistra
+      if ( _col-1 >= 0 && this.boards[1].tiles[row][col-1].value == 1 )  {
+        for (let i = 1; i < max_ship_lenght; i++) {
+          if (col-i >= 0) {
+            if ( this.boards[1].tiles[row][col-i].value == 1 && this.boards[1].tiles[row][col-i].status == 'hit') {
+                sunked.push(this.boards[1].tiles[row][col-i])
+            } else {
+                    if ( this.boards[1].tiles[row][col-i].value == 1 && this.boards[1].tiles[row][col-i].status != 'hit') {
+                      return
+                    }
+            }
+          }
+        }
+      }
+
+      //destra
+      if ( _col+1 < board_size && this.boards[1].tiles[row][col+1].value == 1 )  {
+        for (let i = 1; i < max_ship_lenght; i++) {
+          if (col+i < board_size ) {
+            if ( this.boards[1].tiles[row][col+i].value == 1 && this.boards[1].tiles[row][col+i].status == 'hit') {
+                sunked.push(this.boards[1].tiles[row][col+i])
+            } else {
+                    if ( this.boards[1].tiles[row][col+i].value == 1 && this.boards[1].tiles[row][col+i].status != 'hit') {
+                      return
+                    }
+            }
+          }
+        }
+      }
+      */
+        
+      for (let i = 0; i < sunked.length; i++) {
+        sunked[i].value = 2;
+        }
+    }
 
     // Gestisce il click del Giocatore sulla board Avversaria
     self.onPlayerClick = function(click:any) {
@@ -276,7 +398,7 @@ export class GameComponent {
       this.gamedata.socket.emit('on fire', id);
 
       if (this.checkValidHit(tile)) {
-        if (self.gamedata.turno == self.gamedata.numeroGiocatore) {
+        if (self.gamedata.turno == self.gamedata.player) {
           self.gamedata.socket.emit('click tile', self.gamedata.turno);
           // Cambia il turno di colui che ha cliccato e manda l'evento all'altro
           self.gamedata.turno = self.gamedata.turno == "1" ? "2" : "1";
@@ -285,7 +407,7 @@ export class GameComponent {
           // Nave Colpita
           if (tile.value == 1) {
             this.boards[1].tiles[row][col].status = 'hit';
-            this.boards[1].tiles[row][col].value = 2;
+            self.onSunkCheck(+ row,+ col);
             this.score++;
             // Controlla se il giocatore ha vinto
             if(this.score == 27){
@@ -296,33 +418,25 @@ export class GameComponent {
           // Nave non Colpita
           } else {
               this.boards[1].tiles[row][col].status = 'miss' 
-              this.boards[1].tiles[row][col].value = 2;
-            }        
-            return this;
-
+            }       
         } else {
             alert ("Non è il tuo turno.")
           }
       } else {
           alert ("Stai cliccando su una casella che hai già cliccato, riprova") 
         }
+        
     }
 
-    // Visualizza il colpo sulla board dell'avversario
-    self.gamedata.socket.on('fire in the hole', function(data) {
-      self.submitPlayerClick(data);
-      console.log(data);
-    })
-    
+    // Gestione colpo per la board avversaria
     self.submitPlayerClick = function(click:any) {
       
       let id = click,
       row = id.substring(2,3), col = id.substring(3,4),
       tile = this.boards[0].tiles[row][col];
       console.log(click);
-        
 
-      if (self.gamedata.turno != self.gamedata.numeroGiocatore) {
+      if (self.gamedata.turno != self.gamedata.player) {
         if (!this.checkValidHit(tile)) {
             return;
         }
@@ -333,11 +447,24 @@ export class GameComponent {
         } else {
               this.boards[0].tiles[row][col].status = 'miss' 
           }
-        return this;
-
       } 
     }
 
+    // Visualizza il colpo sulla board dell'avversario
+    self.gamedata.socket.on('fire in the hole', function(data) {
+      self.submitPlayerClick(data);
+      console.log(data);
+    })
+  
+  }
+
+  // Resetta la board in Fase di Posizionamento
+  resetBoard(){
+    this.boards.shift();
+    this.myBoard=this.boardService.createBoard()
+    var fleet = this.ship_duplicate.slice(0);
+    this.ship_array = fleet;
+    console.log(this.ship_duplicate);  
   }
 
   // Invio board all'avversario
@@ -349,20 +476,14 @@ export class GameComponent {
     return;
    }
 
-  // Resetta la board in Fase di Posizionamento
-  deleteShips(){
-    this.boards.shift();
-    this.myBoard=this.boardService.createBoard()
-    var fleet = this.ship_duplicate.slice(0);
-    this.ship_array = fleet;
-    console.log(this.ship_duplicate);  
-  }
-
   // Controlla se una tile è già stata cliccata
   checkValidHit(tile: any) : boolean {
     var clickable = true;
 
-    if (tile.value == 2 ) {
+    if (tile.status == 'hit' || tile.status == 'miss') {
+      clickable = false;
+    }
+    if (tile.value == 3 ) {
       clickable = false
     }
     return clickable;
@@ -379,21 +500,23 @@ export class GameComponent {
     if (this.gamedata.alone) {
       if(window.confirm('Stai abbandonando la coda, sei sicuro? La tua room verrà distrutta.')){
         this.gamedata.socket.emit('on leaving queue');
-        return true
+        return true;
       }
+      else return false;
+      
     } 
-
     if (!this.gameOver) {
       console.log(this.gamedata.gameId);
       if(window.confirm('Stai abbandonando la partita, sei sicuro? Ciò porterà ad una sconfitta.')){
         console.log(this.gamedata.gameId);
         this.gamedata.socket.emit('on leaving');
-        //this.gamedata.socket.to('' + this.gamedata.gameId).broadcast.emit('on leaving');
-        //non posso fare il to('' + gameId perchè mi dice che non è una funzione???????????)
-        this.dataService.patchVictory(this.username);
+        this.dataService.patchDefeat(this.username);
         return true
       }
     } 
     else return true;
   }
-} 
+
+
+
+}

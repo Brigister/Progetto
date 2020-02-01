@@ -1,4 +1,4 @@
-#Fri Dec 21 11:13:53 CET 2018
-base.0=C\:\\Users\\Byteman\\Desktop\\mobilebyu\\cordova\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
+#Mon Dec 24 19:26:05 CET 2018
+base.0=C\:\\Users\\Byteman\\Desktop\\Universita\\Tecnologie ed Applicazioni Web\\Progettone\\battleship_mobile\\cordova\\platforms\\android\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\0
 path.0=classes.dex
 renamed.0=classes.dex

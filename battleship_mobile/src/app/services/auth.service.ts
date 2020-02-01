@@ -7,9 +7,9 @@ import * as JWT from "jwt-decode"
 export class AuthService {
  
  
-  private _registerUrl = "http://localhost:3000/user/signup"; 
-  private _loginUrl = "http://localhost:3000/user/login"; 
-  private _userUrl = "http://localhost:3000/user/"; 
+  private _registerUrl = "http://10.0.2.2:3000/user/signup"; 
+  private _loginUrl = "http://10.0.2.2:3000/user/login"; 
+  private _userUrl = "http://10.0.2.2:3000/user/"; 
  
   constructor(private http: HttpClient, 
               private _router: Router) { } 
