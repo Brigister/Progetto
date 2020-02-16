@@ -1,4 +1,4 @@
-# Progetto
+# Battleship
 
 Per avviare il server:
 
